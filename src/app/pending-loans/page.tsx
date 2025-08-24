@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -42,15 +42,54 @@ const initialPendingLoans = [
     { id: '1000', name: 'Testing', phone: '6666666666', amount: '¥800,000', term: 12, requestedAt: '8/12/2025, 2:30:42 PM', status: 'Pending' },
 ];
 
+interface Loan {
+  id: string;
+  name: string;
+  phone: string;
+  amount: string;
+  term: number;
+  requestedAt: string;
+  status: string;
+}
+
 
 export default function PendingLoansPage() {
-  const [pendingLoans, setPendingLoans] = useState(initialPendingLoans);
+  const [pendingLoans, setPendingLoans] = useState<Loan[]>([]);
+
+  useEffect(() => {
+    const storedPendingLoans = localStorage.getItem('pendingLoans');
+    if (storedPendingLoans) {
+      setPendingLoans(JSON.parse(storedPendingLoans));
+    } else {
+      setPendingLoans(initialPendingLoans);
+    }
+  }, []);
+
+  const updateLocalStorage = (updatedLoans: Loan[]) => {
+      localStorage.setItem('pendingLoans', JSON.stringify(updatedLoans));
+  };
+
 
   const handleLoanAction = (loanId: string, newStatus: 'Approved' | 'Rejected') => {
-    // In a real app, you'd send this to a server.
-    // For now, we'll just log it and remove the loan from the list.
+    const loanToMove = pendingLoans.find(loan => loan.id === loanId);
+    if (!loanToMove) return;
+
+    const updatedPendingLoans = pendingLoans.filter(loan => loan.id !== loanId);
+    setPendingLoans(updatedPendingLoans);
+    updateLocalStorage(updatedPendingLoans);
+
+    if (newStatus === 'Rejected') {
+      const rejectedLoan = { 
+        ...loanToMove, 
+        status: 'Rejected', 
+        dateRejected: new Date().toLocaleString(),
+        rejectedBy: 'Admin'
+      };
+      const currentRejected = JSON.parse(localStorage.getItem('rejectedLoans') || '[]');
+      localStorage.setItem('rejectedLoans', JSON.stringify([rejectedLoan, ...currentRejected]));
+    }
+    
     console.log(`Loan ${loanId} has been ${newStatus}`);
-    setPendingLoans(currentLoans => currentLoans.filter(loan => loan.id !== loanId));
   };
 
 

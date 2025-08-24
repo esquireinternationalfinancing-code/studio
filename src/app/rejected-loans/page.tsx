@@ -1,6 +1,7 @@
 
 "use client";
 
+import { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -31,10 +32,27 @@ import { DashboardSidebar } from "@/components/dashboard/sidebar";
 import { XCircle, RefreshCw, Search, Eye } from "lucide-react";
 import Image from "next/image";
 
-const rejectedLoans: any[] = [];
-
+interface RejectedLoan {
+  id: string;
+  name: string;
+  phone: string;
+  amount: string;
+  term: number;
+  dateRejected: string;
+  rejectedBy: string;
+  status: string;
+}
 
 export default function RejectedLoansPage() {
+  const [rejectedLoans, setRejectedLoans] = useState<RejectedLoan[]>([]);
+
+  useEffect(() => {
+    const storedRejectedLoans = localStorage.getItem('rejectedLoans');
+    if (storedRejectedLoans) {
+      setRejectedLoans(JSON.parse(storedRejectedLoans));
+    }
+  }, []);
+
   return (
     <div className="flex min-h-screen w-full">
       <DashboardSidebar activePage="rejected-loans" />
