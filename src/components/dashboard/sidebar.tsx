@@ -63,7 +63,7 @@ const AdminAvatarIcon = () => (
 
 
 interface DashboardSidebarProps {
-  activePage?: 'home' | 'administrator' | 'pending-loans' | 'approved-loans' | 'rejected-loans';
+  activePage?: 'home' | 'administrator' | 'pending-loans' | 'approved-loans' | 'rejected-loans' | 'management-info';
 }
 
 export function DashboardSidebar({ activePage = 'home' }: DashboardSidebarProps) {
@@ -143,10 +143,12 @@ export function DashboardSidebar({ activePage = 'home' }: DashboardSidebarProps)
         </div>
         <div>
           <h3 className="px-4 text-xs font-semibold text-accent my-2 uppercase tracking-wider">Killer Panel</h3>
-          <Button variant="ghost" className="w-full justify-start">
-            <FileText className="mr-2 h-4 w-4" />
-            Management Info
-          </Button>
+          <Link href="/management-info" passHref>
+            <Button variant={activePage === 'management-info' ? 'default' : 'ghost'} className={cn("w-full justify-start", activePage === 'management-info' && "bg-primary text-primary-foreground")}>
+              <FileText className="mr-2 h-4 w-4" />
+              Management Info
+            </Button>
+          </Link>
           <Button variant="ghost" className="w-full justify-start">
             <CreditCard className="mr-2 h-4 w-4" />
             Withdrawal Detail
