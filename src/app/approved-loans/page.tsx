@@ -135,10 +135,6 @@ export default function ApprovedLoansPage() {
                                         </DialogFooter>
                                       </DialogContent>
                                     </Dialog>
-                                    <Button size="sm" className="bg-yellow-500 hover:bg-yellow-600 text-white">
-                                        <Edit className="mr-1 h-4 w-4" />
-                                        Update Loan
-                                    </Button>
                                 </TableCell>
                             </TableRow>
                         ))}
