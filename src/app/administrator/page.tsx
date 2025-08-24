@@ -1,3 +1,6 @@
+
+"use client";
+
 import {
   Card,
   CardContent,
@@ -22,6 +25,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogTrigger,
+  DialogClose,
+} from "@/components/ui/dialog";
 import { DashboardSidebar } from "@/components/dashboard/sidebar";
 
 export default function AdministratorPage() {
@@ -82,7 +94,27 @@ export default function AdministratorPage() {
                         <TableCell>Admin</TableCell>
                         <TableCell>07/08/2025, 16:00:40</TableCell>
                         <TableCell className="space-x-2">
-                          <Button variant="outline" size="sm" className="bg-yellow-500 text-white hover:bg-yellow-600">Update</Button>
+                          <Dialog>
+                            <DialogTrigger asChild>
+                               <Button variant="outline" size="sm" className="bg-yellow-500 text-white hover:bg-yellow-600">Update</Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                              <DialogHeader>
+                                <DialogTitle>Update User</DialogTitle>
+                              </DialogHeader>
+                              <div className="space-y-4">
+                                <Input placeholder="New phone number" />
+                                <Input type="password" placeholder="New password" />
+                              </div>
+                              <DialogFooter>
+                                <DialogClose asChild>
+                                  <Button variant="outline">Cancel</Button>
+                                </DialogClose>
+                                <Button>Save Changes</Button>
+                              </DialogFooter>
+                            </DialogContent>
+                          </Dialog>
+
                           <Button variant="destructive" size="sm">Delete</Button>
                         </TableCell>
                       </TableRow>
