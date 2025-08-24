@@ -1,6 +1,7 @@
 
 "use client";
 
+import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -21,7 +22,7 @@ import { Badge } from "@/components/ui/badge";
 import { DashboardSidebar } from "@/components/dashboard/sidebar";
 import { Clock, RefreshCw, Search, Eye, Edit, Check, X } from "lucide-react";
 
-const pendingLoans = [
+const initialPendingLoans = [
     { id: '1015', name: '22', phone: '22', amount: '¥22,220,000', term: 6, requestedAt: '8/24/2025, 9:33:56 AM', status: 'Pending' },
     { id: '1014', name: '33', phone: '33', amount: '¥500,000', term: 6, requestedAt: '8/24/2025, 9:14:14 AM', status: 'Pending' },
     { id: '1013', name: '333', phone: '33', amount: '¥500,000', term: 12, requestedAt: '8/19/2025, 6:38:43 PM', status: 'Pending' },
@@ -32,6 +33,16 @@ const pendingLoans = [
 
 
 export default function PendingLoansPage() {
+  const [pendingLoans, setPendingLoans] = useState(initialPendingLoans);
+
+  const handleLoanAction = (loanId: string, newStatus: 'Approved' | 'Rejected') => {
+    // In a real app, you would send this to a server.
+    // For now, we'll just filter it out from the pending list.
+    console.log(`Loan ${loanId} has been ${newStatus}`);
+    setPendingLoans(currentLoans => currentLoans.filter(loan => loan.id !== loanId));
+  };
+
+
   return (
     <div className="flex min-h-screen w-full">
       <DashboardSidebar activePage="pending-loans" />
@@ -93,11 +104,11 @@ export default function PendingLoansPage() {
                                         <Edit className="mr-1 h-4 w-4" />
                                         Update Loan
                                     </Button>
-                                    <Button size="sm" className="bg-green-500 hover:bg-green-600 text-white">
+                                    <Button size="sm" className="bg-green-500 hover:bg-green-600 text-white" onClick={() => handleLoanAction(loan.id, 'Approved')}>
                                         <Check className="mr-1 h-4 w-4" />
                                         Approve
                                     </Button>
-                                    <Button size="sm" variant="destructive">
+                                    <Button size="sm" variant="destructive" onClick={() => handleLoanAction(loan.id, 'Rejected')}>
                                         <X className="mr-1 h-4 w-4" />
                                         Reject
                                     </Button>
