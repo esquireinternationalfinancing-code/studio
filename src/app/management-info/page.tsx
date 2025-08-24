@@ -382,7 +382,28 @@ export default function ManagementInfoPage() {
                                         <ModifyStatusDialogContent name={item.name} />
                                     </Dialog>
 
-                                    <Button size="sm" className="bg-green-500 hover:bg-green-600 text-white"><CreditCard className="mr-1" /> Modify Bank</Button>
+                                    <Dialog>
+                                        <DialogTrigger asChild>
+                                            <Button size="sm" className="bg-green-500 hover:bg-green-600 text-white"><CreditCard className="mr-1" /> Modify Bank</Button>
+                                        </DialogTrigger>
+                                        <DialogContent>
+                                            <DialogHeader>
+                                                <DialogTitle>Modify Bank Info for {item.name}</DialogTitle>
+                                            </DialogHeader>
+                                            <div className="space-y-4 py-4">
+                                                <Input placeholder="Bank Name" />
+                                                <Input placeholder="Account Number" />
+                                            </div>
+                                            <DialogFooter>
+                                                <DialogClose asChild>
+                                                    <Button variant="outline">Cancel</Button>
+                                                </DialogClose>
+                                                <DialogClose asChild>
+                                                    <Button className="bg-green-500 hover:bg-green-600 text-white">Save Bank Info</Button>
+                                                </DialogClose>
+                                            </DialogFooter>
+                                        </DialogContent>
+                                    </Dialog>
                                     <Button size="sm" className="bg-purple-500 hover:bg-purple-600 text-white"><CreditCard className="mr-1" /> Modify Credit Score</Button>
                                     <Button size="sm" variant="destructive"><Lock className="mr-1" /> Modify Password</Button>
                                     <Button size="sm"><Banknote className="mr-1" /> Modify Amount</Button>
