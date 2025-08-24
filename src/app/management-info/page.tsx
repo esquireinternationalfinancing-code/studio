@@ -28,207 +28,95 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { DashboardSidebar } from "@/components/dashboard/sidebar";
-import { Rocket, RefreshCw, Search, Eye, Edit, KeyRound, Banknote, CreditCard, Lock, FileText, Trash2, User } from "lucide-react";
+import { Rocket, RefreshCw, Search, Eye, Edit, KeyRound, Banknote, CreditCard, Lock, FileText, User } from "lucide-react";
 import Image from "next/image";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-
-const managementData = [
-    { 
-        id: '1007', 
-        name: '雲雀恭子', 
-        phone: '00425409066', 
-        amount: '¥500,000', 
-        creditScore: 500, 
-        dateApproved: '8/19/2025, 9:29:53 AM',
-        idNumber: '448108318440',
-        address: '立川市富士見町5-14-7',
-        companyName: 'ケアレジデンス立川',
-        position: '介護士',
-        income: '¥270,000',
-        monthlyExpense: '¥310,000',
-        bankName: 'みずほ銀行 調布支店',
-        accountNumber: '8104188',
-        loanPeriod: 24,
-        monthlyPayment: '¥26,435.55',
-        createdAt: '8/17/2025, 7:22:33 PM',
-        approvedBy: 'Admin',
-    },
-    { 
-        id: '1008', 
-        name: '雲雀恭子', 
-        phone: '0425409066', 
-        amount: '¥500,000', 
-        creditScore: 500, 
-        dateApproved: '8/19/2025, 9:29:48 AM',
-        idNumber: '448108318440',
-        address: '立川市富士見町5-14-7',
-        companyName: 'ケアレジデンス立川',
-        position: '介護士',
-        income: '¥270,000',
-        monthlyExpense: '¥310,000',
-        bankName: 'みずほ銀行 調布支店',
-        accountNumber: '8104188',
-        loanPeriod: 24,
-        monthlyPayment: '¥26,435.55',
-        createdAt: '8/17/2025, 7:22:33 PM',
-        approvedBy: 'Admin',
-    },
-    { 
-        id: '1009', 
-        name: '荒木弘', 
-        phone: '0423374488', 
-        amount: '¥0', 
-        creditScore: 400, 
-        dateApproved: '8/18/2025, 9:03:17 AM',
-        idNumber: '448108318440',
-        address: '立川市富士見町5-14-7',
-        companyName: 'ケアレジデンス立川',
-        position: '介護士',
-        income: '¥270,000',
-        monthlyExpense: '¥310,000',
-        bankName: 'みずほ銀行 調布支店',
-        accountNumber: '8104188',
-        loanPeriod: 24,
-        monthlyPayment: '¥26,435.55',
-        createdAt: '8/17/2025, 7:22:33 PM',
-        approvedBy: 'Admin',
-    },
-    { 
-        id: '1006', 
-        name: '原正弘', 
-        phone: '0569559921', 
-        amount: '¥500,000', 
-        creditScore: 500, 
-        dateApproved: '8/13/2025, 12:20:55 PM',
-        idNumber: '448108318440',
-        address: '立川市富士見町5-14-7',
-        companyName: 'ケアレジデンス立川',
-        position: '介護士',
-        income: '¥270,000',
-        monthlyExpense: '¥310,000',
-        bankName: 'みずほ銀行 調布支店',
-        accountNumber: '8104188',
-        loanPeriod: 24,
-        monthlyPayment: '¥26,435.55',
-        createdAt: '8/17/2025, 7:22:33 PM',
-        approvedBy: 'Admin',
-    },
-    { 
-        id: '996', 
-        name: 'Andreas Rudi Schmetzer', 
-        phone: '00491723789846', 
-        amount: '¥250,000', 
-        creditScore: 500, 
-        dateApproved: '8/9/2025, 1:16:15 PM',
-        idNumber: '448108318440',
-        address: '立川市富士見町5-14-7',
-        companyName: 'ケアレジデンス立川',
-        position: '介護士',
-        income: '¥270,000',
-        monthlyExpense: '¥310,000',
-        bankName: 'みずほ銀行 調布支店',
-        accountNumber: '8104188',
-        loanPeriod: 24,
-        monthlyPayment: '¥26,435.55',
-        createdAt: '8/17/2025, 7:22:33 PM',
-        approvedBy: 'Admin',
-    },
-    { 
-        id: '1001', 
-        name: '5555555555', 
-        phone: '5555555555', 
-        amount: '¥52,500', 
-        creditScore: 400, 
-        dateApproved: '8/7/2025, 3:45:49 PM',
-        idNumber: '448108318440',
-        address: '立川市富士見町5-14-7',
-        companyName: 'ケアレジデンス立川',
-        position: '介護士',
-        income: '¥270,000',
-        monthlyExpense: '¥310,000',
-        bankName: 'みずほ銀行 調布支店',
-        accountNumber: '8104188',
-        loanPeriod: 24,
-        monthlyPayment: '¥26,435.55',
-        createdAt: '8/17/2025, 7:22:33 PM',
-        approvedBy: 'Admin',
-    },
-];
-
+import type { Loan } from "@/services/api";
+import { getLoans, updateLoan } from "@/services/api";
+import { useToast } from "@/hooks/use-toast";
 
 const UserProfileDetail = ({ label, value }: { label: string, value: string | number | undefined }) => (
     <div>
         <p className="text-sm text-muted-foreground">{label}</p>
-        <p className="font-semibold">{value}</p>
+        <p className="font-semibold">{value ?? 'N/A'}</p>
     </div>
 );
 
-const ModifyStatusDialogContent = ({ name }: { name: string }) => {
-  const [status, setStatus] = useState("Approved");
+const ModifyStatusDialogContent = ({ loan, onClose }: { loan: Loan, onClose: () => void }) => {
+  const [status, setStatus] = useState(loan.status ?? "Approved");
   const [message, setMessage] = useState("Congratulations, Your loan has been approved. Contact our finance to obtain OTP code");
+  const { toast } = useToast();
 
   const handleCheckboxChange = (checked: boolean | 'indeterminate', type: string) => {
+    let newStatus = "Approved";
+    let newMessage = "Congratulations, Your loan has been approved. Contact our finance to obtain OTP code";
+
     if (checked) {
         switch (type) {
             case 'pending':
-                setStatus("Pending");
-                setMessage("Your loan application is currently pending review.");
+                newStatus = "Pending";
+                newMessage = "Your loan application is currently pending review.";
                 break;
             case 'bank-incorrect':
-                setStatus("Bank Information Incorrect");
-                setMessage("There appears to be an issue with the bank information you provided. Please review and update your details to proceed.");
+                newStatus = "Bank Information Incorrect";
+                newMessage = "There appears to be an issue with the bank information you provided. Please review and update your details to proceed.";
                 break;
             case 'invalid-amount':
-                setStatus("Withdraw Invalid Amount");
-                setMessage("The withdrawal amount requested is invalid. Please check the amount and try again.");
+                newStatus = "Withdraw Invalid Amount";
+                newMessage = "The withdrawal amount requested is invalid. Please check the amount and try again.";
                 break;
             case 'confirm-otp':
-                setStatus("Confirm New OTP");
-                setMessage("A new OTP has been generated. Please use this to confirm your transaction.");
+                newStatus = "Confirm New OTP";
+                newMessage = "A new OTP has been generated. Please use this to confirm your transaction.";
                 break;
             case 'insufficient-credit':
-                setStatus("Insufficient Credit Score");
-                setMessage("Your loan could not be processed due to an insufficient credit score. Please contact us for more details.");
+                newStatus = "Insufficient Credit Score";
+                newMessage = "Your loan could not be processed due to an insufficient credit score. Please contact us for more details.";
                 break;
             default:
                 break;
         }
-    } else {
-      setStatus("Approved");
-      setMessage("Congratulations, Your loan has been approved. Contact our finance to obtain OTP code");
     }
+    setStatus(newStatus);
+    setMessage(newMessage);
+  };
+  
+  const handleSave = async () => {
+    await updateLoan(loan.id, { status });
+    toast({ title: "Status Updated", description: `Status for ${loan.name} updated to ${status}.`});
+    onClose();
   };
 
   return (
     <DialogContent>
         <DialogHeader>
-            <DialogTitle>Modify Loan Status &amp; Notify Message for {name}</DialogTitle>
+            <DialogTitle>Modify Loan Status &amp; Notify Message for {loan.name}</DialogTitle>
         </DialogHeader>
         <div className="space-y-4 py-4">
             <Input value={status} onChange={(e) => setStatus(e.target.value)} />
-            <Textarea value={message} onChange={(e) => setMessage(e.target.value)} />
+            <Textarea value={message} onChange={(e) => setMessage(e.target.value)} rows={4} />
             <div className="space-y-2">
                 <div className="flex items-center space-x-2">
-                    <Checkbox id={`pending-${name}`} onCheckedChange={(checked) => handleCheckboxChange(checked, 'pending')} />
-                    <Label htmlFor={`pending-${name}`}>Pending</Label>
+                    <Checkbox id={`pending-${loan.id}`} onCheckedChange={(checked) => handleCheckboxChange(checked, 'pending')} />
+                    <Label htmlFor={`pending-${loan.id}`}>Pending</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                    <Checkbox id={`bank-incorrect-${name}`} onCheckedChange={(checked) => handleCheckboxChange(checked, 'bank-incorrect')} />
-                    <Label htmlFor={`bank-incorrect-${name}`}>Bank Information Incorrect</Label>
+                    <Checkbox id={`bank-incorrect-${loan.id}`} onCheckedChange={(checked) => handleCheckboxChange(checked, 'bank-incorrect')} />
+                    <Label htmlFor={`bank-incorrect-${loan.id}`}>Bank Information Incorrect</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                    <Checkbox id={`invalid-amount-${name}`} onCheckedChange={(checked) => handleCheckboxChange(checked, 'invalid-amount')} />
-                    <Label htmlFor={`invalid-amount-${name}`}>Withdraw Invalid Amount</Label>
+                    <Checkbox id={`invalid-amount-${loan.id}`} onCheckedChange={(checked) => handleCheckboxChange(checked, 'invalid-amount')} />
+                    <Label htmlFor={`invalid-amount-${loan.id}`}>Withdraw Invalid Amount</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                    <Checkbox id={`confirm-otp-${name}`} onCheckedChange={(checked) => handleCheckboxChange(checked, 'confirm-otp')} />
-                    <Label htmlFor={`confirm-otp-${name}`}>Confirm New OTP</Label>
+                    <Checkbox id={`confirm-otp-${loan.id}`} onCheckedChange={(checked) => handleCheckboxChange(checked, 'confirm-otp')} />
+                    <Label htmlFor={`confirm-otp-${loan.id}`}>Confirm New OTP</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                    <Checkbox id={`insufficient-credit-${name}`} onCheckedChange={(checked) => handleCheckboxChange(checked, 'insufficient-credit')} />
-                    <Label htmlFor={`insufficient-credit-${name}`}>Insufficient Credit Score</Label>
+                    <Checkbox id={`insufficient-credit-${loan.id}`} onCheckedChange={(checked) => handleCheckboxChange(checked, 'insufficient-credit')} />
+                    <Label htmlFor={`insufficient-credit-${loan.id}`}>Insufficient Credit Score</Label>
                 </div>
             </div>
         </div>
@@ -236,16 +124,51 @@ const ModifyStatusDialogContent = ({ name }: { name: string }) => {
             <DialogClose asChild>
                 <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <DialogClose asChild>
-                <Button className="bg-yellow-500 hover:bg-yellow-600 text-white">Save</Button>
-            </DialogClose>
+            <Button onClick={handleSave} className="bg-yellow-500 hover:bg-yellow-600 text-white">Save</Button>
         </DialogFooter>
     </DialogContent>
   );
 };
 
-
 export default function ManagementInfoPage() {
+  const [loans, setLoans] = useState<Loan[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const { toast } = useToast();
+  
+  const [dialogsOpen, setDialogsOpen] = useState<Record<string, boolean>>({});
+
+  const setDialogOpen = (loanId: string, dialog: string, open: boolean) => {
+    setDialogsOpen(prev => ({ ...prev, [`${loanId}-${dialog}`]: open }));
+  };
+
+  const isDialogOpen = (loanId: string, dialog: string) => {
+    return dialogsOpen[`${loanId}-${dialog}`] ?? false;
+  };
+  
+  const fetchData = async () => {
+      setIsLoading(true);
+      const data = await getLoans();
+      setLoans(data);
+      setIsLoading(false);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+  
+  const handleGenericSave = async (loanId: string, field: keyof Loan, value: any, dialog: string) => {
+    await updateLoan(loanId, { [field]: value });
+    toast({ title: "Success", description: `User information has been updated.`});
+    setDialogOpen(loanId, dialog, false);
+    fetchData(); // Refresh data
+  };
+
+
+  const filteredLoans = loans.filter(loan =>
+    loan.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    loan.phone.includes(searchTerm)
+  );
 
   return (
     <div className="flex min-h-screen w-full">
@@ -261,13 +184,17 @@ export default function ManagementInfoPage() {
             </CardHeader>
             <CardContent className="space-y-8">
               <div className="flex items-center gap-4">
-                <Input placeholder="Search Name..." className="max-w-xs" />
-                <Input placeholder="Search Phone..." className="max-w-xs" />
-                <Button>
+                <Input 
+                  placeholder="Search Name or Phone..." 
+                  className="max-w-xs"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <Button onClick={() => setSearchTerm('')}>
                     <Search className="mr-2 h-4 w-4" />
                     Search
                 </Button>
-                <Button variant="outline">
+                <Button variant="outline" onClick={fetchData}>
                     <RefreshCw className="h-4 w-4" />
                 </Button>
               </div>
@@ -287,7 +214,10 @@ export default function ManagementInfoPage() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {managementData.map((item) => (
+                        {isLoading ? (
+                            <TableRow><TableCell colSpan={7} className="text-center">Loading...</TableCell></TableRow>
+                        ) : filteredLoans.length > 0 ? (
+                            filteredLoans.map((item) => (
                             <TableRow key={item.id}>
                                 <TableCell>{item.id}</TableCell>
                                 <TableCell>{item.name}</TableCell>
@@ -296,7 +226,7 @@ export default function ManagementInfoPage() {
                                 <TableCell>{item.creditScore}</TableCell>
                                 <TableCell>{item.dateApproved}</TableCell>
                                 <TableCell className="flex gap-2 flex-wrap max-w-sm">
-                                    <Dialog>
+                                    <Dialog open={isDialogOpen(item.id, 'otp')} onOpenChange={(open) => setDialogOpen(item.id, 'otp', open)}>
                                         <DialogTrigger asChild>
                                             <Button size="sm" className="bg-orange-500 hover:bg-orange-600 text-white"><KeyRound className="mr-1" /> Modify OTP</Button>
                                         </DialogTrigger>
@@ -305,15 +235,13 @@ export default function ManagementInfoPage() {
                                                 <DialogTitle>Modify Otp For {item.name}</DialogTitle>
                                             </DialogHeader>
                                             <div className="space-y-4 py-4">
-                                                <Input placeholder="Enter new OTP" />
+                                                <Input id={`otp-${item.id}`} placeholder="Enter new OTP" />
                                             </div>
                                             <DialogFooter>
                                                 <DialogClose asChild>
                                                     <Button variant="outline">Cancel</Button>
                                                 </DialogClose>
-                                                <DialogClose asChild>
-                                                    <Button>Save</Button>
-                                                </DialogClose>
+                                                <Button onClick={() => handleGenericSave(item.id, 'otp', (document.getElementById(`otp-${item.id}`) as HTMLInputElement).value, 'otp')}>Save</Button>
                                             </DialogFooter>
                                         </DialogContent>
                                     </Dialog>
@@ -375,14 +303,14 @@ export default function ManagementInfoPage() {
                                         </DialogContent>
                                     </Dialog>
                                     
-                                    <Dialog>
+                                    <Dialog open={isDialogOpen(item.id, 'status')} onOpenChange={(open) => setDialogOpen(item.id, 'status', open)}>
                                         <DialogTrigger asChild>
                                            <Button size="sm" className="bg-yellow-500 hover:bg-yellow-600 text-white"><Edit className="mr-1" /> Modify Status</Button>
                                         </DialogTrigger>
-                                        <ModifyStatusDialogContent name={item.name} />
+                                        <ModifyStatusDialogContent loan={item} onClose={() => {setDialogOpen(item.id, 'status', false); fetchData();}} />
                                     </Dialog>
 
-                                    <Dialog>
+                                    <Dialog open={isDialogOpen(item.id, 'bank')} onOpenChange={(open) => setDialogOpen(item.id, 'bank', open)}>
                                         <DialogTrigger asChild>
                                             <Button size="sm" className="bg-green-500 hover:bg-green-600 text-white"><CreditCard className="mr-1" /> Modify Bank</Button>
                                         </DialogTrigger>
@@ -391,20 +319,27 @@ export default function ManagementInfoPage() {
                                                 <DialogTitle>Modify Bank Info for {item.name}</DialogTitle>
                                             </DialogHeader>
                                             <div className="space-y-4 py-4">
-                                                <Input placeholder="Bank Name" />
-                                                <Input placeholder="Account Number" />
+                                                <Input id={`bankName-${item.id}`} placeholder="Bank Name" defaultValue={item.bankName}/>
+                                                <Input id={`accountNumber-${item.id}`} placeholder="Account Number" defaultValue={item.accountNumber} />
                                             </div>
                                             <DialogFooter>
                                                 <DialogClose asChild>
                                                     <Button variant="outline">Cancel</Button>
                                                 </DialogClose>
-                                                <DialogClose asChild>
-                                                    <Button className="bg-green-500 hover:bg-green-600 text-white">Save Bank Info</Button>
-                                                </DialogClose>
+                                                <Button 
+                                                    onClick={() => {
+                                                        const bankName = (document.getElementById(`bankName-${item.id}`) as HTMLInputElement).value;
+                                                        const accountNumber = (document.getElementById(`accountNumber-${item.id}`) as HTMLInputElement).value;
+                                                        handleGenericSave(item.id, 'bankName', bankName, 'bank');
+                                                        handleGenericSave(item.id, 'accountNumber', accountNumber, 'bank');
+                                                    }} 
+                                                    className="bg-green-500 hover:bg-green-600 text-white">
+                                                    Save Bank Info
+                                                </Button>
                                             </DialogFooter>
                                         </DialogContent>
                                     </Dialog>
-                                     <Dialog>
+                                     <Dialog open={isDialogOpen(item.id, 'credit')} onOpenChange={(open) => setDialogOpen(item.id, 'credit', open)}>
                                         <DialogTrigger asChild>
                                             <Button size="sm" className="bg-purple-500 hover:bg-purple-600 text-white"><CreditCard className="mr-1" /> Modify Credit Score</Button>
                                         </DialogTrigger>
@@ -413,19 +348,17 @@ export default function ManagementInfoPage() {
                                                 <DialogTitle>Modify Credit For {item.name}</DialogTitle>
                                             </DialogHeader>
                                             <div className="space-y-4 py-4">
-                                                <Input defaultValue={item.creditScore} />
+                                                <Input id={`creditScore-${item.id}`} type="number" defaultValue={item.creditScore} />
                                             </div>
                                             <DialogFooter>
                                                 <DialogClose asChild>
                                                     <Button variant="outline">Cancel</Button>
                                                 </DialogClose>
-                                                <DialogClose asChild>
-                                                    <Button>Save</Button>
-                                                </DialogClose>
+                                                <Button onClick={() => handleGenericSave(item.id, 'creditScore', parseInt((document.getElementById(`creditScore-${item.id}`) as HTMLInputElement).value), 'credit')}>Save</Button>
                                             </DialogFooter>
                                         </DialogContent>
                                     </Dialog>
-                                    <Dialog>
+                                    <Dialog open={isDialogOpen(item.id, 'password')} onOpenChange={(open) => setDialogOpen(item.id, 'password', open)}>
                                         <DialogTrigger asChild>
                                             <Button size="sm" variant="destructive"><Lock className="mr-1" /> Modify Password</Button>
                                         </DialogTrigger>
@@ -434,19 +367,17 @@ export default function ManagementInfoPage() {
                                                 <DialogTitle>Modify Password For {item.name}</DialogTitle>
                                             </DialogHeader>
                                             <div className="space-y-4 py-4">
-                                                <Input type="password" placeholder="Enter new password" />
+                                                <Input id={`password-${item.id}`} type="password" placeholder="Enter new password" />
                                             </div>
                                             <DialogFooter>
                                                 <DialogClose asChild>
                                                     <Button variant="outline">Cancel</Button>
                                                 </DialogClose>
-                                                <DialogClose asChild>
-                                                    <Button>Save</Button>
-                                                </DialogClose>
+                                                <Button onClick={() => handleGenericSave(item.id, 'password', (document.getElementById(`password-${item.id}`) as HTMLInputElement).value, 'password')}>Save</Button>
                                             </DialogFooter>
                                         </DialogContent>
                                     </Dialog>
-                                    <Dialog>
+                                    <Dialog open={isDialogOpen(item.id, 'amount')} onOpenChange={(open) => setDialogOpen(item.id, 'amount', open)}>
                                         <DialogTrigger asChild>
                                             <Button size="sm"><Banknote className="mr-1" /> Modify Amount</Button>
                                         </DialogTrigger>
@@ -455,22 +386,23 @@ export default function ManagementInfoPage() {
                                                 <DialogTitle>Modify Amount For {item.name}</DialogTitle>
                                             </DialogHeader>
                                             <div className="space-y-4 py-4">
-                                                <Input defaultValue={item.amount} />
+                                                <Input id={`amount-${item.id}`} defaultValue={item.amount} />
                                             </div>
                                             <DialogFooter>
                                                 <DialogClose asChild>
                                                     <Button variant="outline">Cancel</Button>
                                                 </DialogClose>
-                                                <DialogClose asChild>
-                                                    <Button>Save</Button>
-                                                </DialogClose>
+                                                <Button onClick={() => handleGenericSave(item.id, 'amount', (document.getElementById(`amount-${item.id}`) as HTMLInputElement).value, 'amount')}>Save</Button>
                                             </DialogFooter>
                                         </DialogContent>
                                     </Dialog>
                                     <Button size="sm" className="bg-slate-600 hover:bg-slate-700 text-white"><FileText className="mr-1" /> Clear Withdraw | Status</Button>
                                 </TableCell>
                             </TableRow>
-                        ))}
+                        ))
+                        ) : (
+                             <TableRow><TableCell colSpan={7} className="text-center">No users found.</TableCell></TableRow>
+                        )}
                     </TableBody>
                   </Table>
                 </div>
@@ -484,4 +416,3 @@ export default function ManagementInfoPage() {
 }
 
     
-
