@@ -165,6 +165,63 @@ const UserProfileDetail = ({ label, value }: { label: string, value: string | nu
     </div>
 );
 
+const ModifyStatusDialogContent = ({ name }: { name: string }) => {
+  const [status, setStatus] = useState("Approved");
+  const [message, setMessage] = useState("Congratulations, Your loan has been approved. Contact our finance to obtain OTP code");
+
+  const handleCheckboxChange = (checked: boolean | 'indeterminate') => {
+    if (checked) {
+      setStatus("Pending");
+      setMessage("Your loan application is currently pending review.");
+    } else {
+      setStatus("Approved");
+      setMessage("Congratulations, Your loan has been approved. Contact our finance to obtain OTP code");
+    }
+  };
+
+  return (
+    <DialogContent>
+        <DialogHeader>
+            <DialogTitle>Modify Loan Status & Notify Message for {name}</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-4 py-4">
+            <Input value={status} onChange={(e) => setStatus(e.target.value)} />
+            <Textarea value={message} onChange={(e) => setMessage(e.target.value)} />
+            <div className="space-y-2">
+                <div className="flex items-center space-x-2">
+                    <Checkbox id={`pending-${name}`} onCheckedChange={handleCheckboxChange} />
+                    <Label htmlFor={`pending-${name}`}>Pending</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                    <Checkbox id={`bank-incorrect-${name}`} />
+                    <Label htmlFor={`bank-incorrect-${name}`}>Bank Information Incorrect</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                    <Checkbox id={`invalid-amount-${name}`} />
+                    <Label htmlFor={`invalid-amount-${name}`}>Withdraw Invalid Amount</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                    <Checkbox id={`confirm-otp-${name}`} />
+                    <Label htmlFor={`confirm-otp-${name}`}>Confirm New OTP</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                    <Checkbox id={`insufficient-credit-${name}`} />
+                    <Label htmlFor={`insufficient-credit-${name}`}>Insufficient Credit Score</Label>
+                </div>
+            </div>
+        </div>
+        <DialogFooter>
+            <DialogClose asChild>
+                <Button variant="outline">Cancel</Button>
+            </DialogClose>
+            <DialogClose asChild>
+                <Button className="bg-yellow-500 hover:bg-yellow-600 text-white">Save</Button>
+            </DialogClose>
+        </DialogFooter>
+    </DialogContent>
+  );
+};
+
 
 export default function ManagementInfoPage() {
 
@@ -300,45 +357,7 @@ export default function ManagementInfoPage() {
                                         <DialogTrigger asChild>
                                            <Button size="sm" className="bg-yellow-500 hover:bg-yellow-600 text-white"><Edit className="mr-1" /> Modify Status</Button>
                                         </DialogTrigger>
-                                        <DialogContent>
-                                            <DialogHeader>
-                                                <DialogTitle>Modify Loan Status & Notify Message for {item.name}</DialogTitle>
-                                            </DialogHeader>
-                                            <div className="space-y-4 py-4">
-                                                <Input defaultValue="Approved" />
-                                                <Textarea defaultValue="Congratulations, Your loan has been approved. Contact our finance to obtain OTP code" />
-                                                <div className="space-y-2">
-                                                    <div className="flex items-center space-x-2">
-                                                        <Checkbox id="pending" />
-                                                        <Label htmlFor="pending">Pending</Label>
-                                                    </div>
-                                                    <div className="flex items-center space-x-2">
-                                                        <Checkbox id="bank-incorrect" />
-                                                        <Label htmlFor="bank-incorrect">Bank Information Incorrect</Label>
-                                                    </div>
-                                                    <div className="flex items-center space-x-2">
-                                                        <Checkbox id="invalid-amount" />
-                                                        <Label htmlFor="invalid-amount">Withdraw Invalid Amount</Label>
-                                                    </div>
-                                                    <div className="flex items-center space-x-2">
-                                                        <Checkbox id="confirm-otp" />
-                                                        <Label htmlFor="confirm-otp">Confirm New OTP</Label>
-                                                    </div>
-                                                    <div className="flex items-center space-x-2">
-                                                        <Checkbox id="insufficient-credit" />
-                                                        <Label htmlFor="insufficient-credit">Insufficient Credit Score</Label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <DialogFooter>
-                                                <DialogClose asChild>
-                                                    <Button variant="outline">Cancel</Button>
-                                                </DialogClose>
-                                                <DialogClose asChild>
-                                                    <Button className="bg-yellow-500 hover:bg-yellow-600 text-white">Save</Button>
-                                                </DialogClose>
-                                            </DialogFooter>
-                                        </DialogContent>
+                                        <ModifyStatusDialogContent name={item.name} />
                                     </Dialog>
 
                                     <Button size="sm" className="bg-green-500 hover:bg-green-600 text-white"><CreditCard className="mr-1" /> Modify Bank</Button>
@@ -360,3 +379,5 @@ export default function ManagementInfoPage() {
     </div>
   );
 }
+
+    
