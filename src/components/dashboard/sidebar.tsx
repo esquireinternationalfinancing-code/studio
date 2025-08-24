@@ -14,7 +14,7 @@ import {
   Frown, // Using Frown for "Killer Panel", can be replaced
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 const CustomIcon = () => (
     <svg
@@ -62,7 +62,7 @@ export function DashboardSidebar() {
       </div>
       <div className="p-4 flex items-center gap-3 border-t border-b">
         <Avatar>
-          <AvatarImage src="https://placehold.co/40x40/FBBF24/374151.png" alt="Admin" data-ai-hint="person portrait" />
+          <AvatarImage src="https://placehold.co/40x40.png" alt="Admin" data-ai-hint="person portrait" />
           <AvatarFallback>A</AvatarFallback>
         </Avatar>
         <div>
