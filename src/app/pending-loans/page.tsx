@@ -45,7 +45,8 @@ export default function PendingLoansPage() {
   const fetchData = async () => {
     setIsLoading(true);
     const allLoans = await getLoans();
-    const pending = allLoans.filter(loan => loan.status === 'Pending');
+    // Show loans that are 'Pending' or have no status yet (new applications)
+    const pending = allLoans.filter(loan => loan.status === 'Pending' || !loan.status);
     setPendingLoans(pending);
     setIsLoading(false);
   };
@@ -149,7 +150,7 @@ export default function PendingLoansPage() {
                                     <TableCell>{loan.loanPeriod}</TableCell>
                                     <TableCell>{loan.createdAt}</TableCell>
                                     <TableCell>
-                                        <Badge variant="outline" className="text-yellow-600 border-yellow-600">{loan.status}</Badge>
+                                        <Badge variant="outline" className="text-yellow-600 border-yellow-600">{loan.status || 'New'}</Badge>
                                     </TableCell>
                                     <TableCell className="flex gap-2 flex-wrap">
                                         <Dialog>
