@@ -1,6 +1,7 @@
 
 "use client";
 
+import { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -31,10 +32,27 @@ import { DashboardSidebar } from "@/components/dashboard/sidebar";
 import { CheckCircle, RefreshCw, Search, Eye, Edit } from "lucide-react";
 import Image from "next/image";
 
-const approvedLoans: any[] = [];
-
+interface ApprovedLoan {
+  id: string;
+  name: string;
+  phone: string;
+  amount: string;
+  term: number;
+  dateApproved: string;
+  approvedBy: string;
+  status: string;
+}
 
 export default function ApprovedLoansPage() {
+  const [approvedLoans, setApprovedLoans] = useState<ApprovedLoan[]>([]);
+
+  useEffect(() => {
+    const storedApprovedLoans = localStorage.getItem('approvedLoans');
+    if (storedApprovedLoans) {
+      setApprovedLoans(JSON.parse(storedApprovedLoans));
+    }
+  }, []);
+
   return (
     <div className="flex min-h-screen w-full">
       <DashboardSidebar activePage="approved-loans" />

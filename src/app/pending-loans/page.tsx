@@ -87,6 +87,15 @@ export default function PendingLoansPage() {
       };
       const currentRejected = JSON.parse(localStorage.getItem('rejectedLoans') || '[]');
       localStorage.setItem('rejectedLoans', JSON.stringify([rejectedLoan, ...currentRejected]));
+    } else if (newStatus === 'Approved') {
+        const approvedLoan = {
+            ...loanToMove,
+            status: 'Approved',
+            dateApproved: new Date().toLocaleString(),
+            approvedBy: 'Admin'
+        };
+        const currentApproved = JSON.parse(localStorage.getItem('approvedLoans') || '[]');
+        localStorage.setItem('approvedLoans', JSON.stringify([approvedLoan, ...currentApproved]));
     }
     
     console.log(`Loan ${loanId} has been ${newStatus}`);
