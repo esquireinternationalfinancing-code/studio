@@ -28,17 +28,139 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { DashboardSidebar } from "@/components/dashboard/sidebar";
-import { Rocket, RefreshCw, Search, Eye, Edit, KeyRound, Banknote, CreditCard, Lock, FileText, Trash2 } from "lucide-react";
+import { Rocket, RefreshCw, Search, Eye, Edit, KeyRound, Banknote, CreditCard, Lock, FileText, Trash2, User } from "lucide-react";
 import Image from "next/image";
 
 const managementData = [
-    { id: '1007', name: '雲雀恭子', phone: '00425409066', amount: '¥500,000', creditScore: 500, dateApproved: '8/19/2025, 9:29:53 AM' },
-    { id: '1008', name: '雲雀恭子', phone: '0425409066', amount: '¥500,000', creditScore: 500, dateApproved: '8/19/2025, 9:29:48 AM' },
-    { id: '1009', name: '荒木弘', phone: '0423374488', amount: '¥0', creditScore: 400, dateApproved: '8/18/2025, 9:03:17 AM' },
-    { id: '1006', name: '原正弘', phone: '0569559921', amount: '¥500,000', creditScore: 500, dateApproved: '8/13/2025, 12:20:55 PM' },
-    { id: '996', name: 'Andreas Rudi Schmetzer', phone: '00491723789846', amount: '¥250,000', creditScore: 500, dateApproved: '8/9/2025, 1:16:15 PM' },
-    { id: '1001', name: '5555555555', phone: '5555555555', amount: '¥52,500', creditScore: 400, dateApproved: '8/7/2025, 3:45:49 PM' },
+    { 
+        id: '1007', 
+        name: '雲雀恭子', 
+        phone: '00425409066', 
+        amount: '¥500,000', 
+        creditScore: 500, 
+        dateApproved: '8/19/2025, 9:29:53 AM',
+        idNumber: '448108318440',
+        address: '立川市富士見町5-14-7',
+        companyName: 'ケアレジデンス立川',
+        position: '介護士',
+        income: '¥270,000',
+        monthlyExpense: '¥310,000',
+        bankName: 'みずほ銀行 調布支店',
+        accountNumber: '8104188',
+        loanPeriod: 24,
+        monthlyPayment: '¥26,435.55',
+        createdAt: '8/17/2025, 7:22:33 PM',
+        approvedBy: 'Admin',
+    },
+    { 
+        id: '1008', 
+        name: '雲雀恭子', 
+        phone: '0425409066', 
+        amount: '¥500,000', 
+        creditScore: 500, 
+        dateApproved: '8/19/2025, 9:29:48 AM',
+        idNumber: '448108318440',
+        address: '立川市富士見町5-14-7',
+        companyName: 'ケアレジデンス立川',
+        position: '介護士',
+        income: '¥270,000',
+        monthlyExpense: '¥310,000',
+        bankName: 'みずほ銀行 調布支店',
+        accountNumber: '8104188',
+        loanPeriod: 24,
+        monthlyPayment: '¥26,435.55',
+        createdAt: '8/17/2025, 7:22:33 PM',
+        approvedBy: 'Admin',
+    },
+    { 
+        id: '1009', 
+        name: '荒木弘', 
+        phone: '0423374488', 
+        amount: '¥0', 
+        creditScore: 400, 
+        dateApproved: '8/18/2025, 9:03:17 AM',
+        idNumber: '448108318440',
+        address: '立川市富士見町5-14-7',
+        companyName: 'ケアレジデンス立川',
+        position: '介護士',
+        income: '¥270,000',
+        monthlyExpense: '¥310,000',
+        bankName: 'みずほ銀行 調布支店',
+        accountNumber: '8104188',
+        loanPeriod: 24,
+        monthlyPayment: '¥26,435.55',
+        createdAt: '8/17/2025, 7:22:33 PM',
+        approvedBy: 'Admin',
+    },
+    { 
+        id: '1006', 
+        name: '原正弘', 
+        phone: '0569559921', 
+        amount: '¥500,000', 
+        creditScore: 500, 
+        dateApproved: '8/13/2025, 12:20:55 PM',
+        idNumber: '448108318440',
+        address: '立川市富士見町5-14-7',
+        companyName: 'ケアレジデンス立川',
+        position: '介護士',
+        income: '¥270,000',
+        monthlyExpense: '¥310,000',
+        bankName: 'みずほ銀行 調布支店',
+        accountNumber: '8104188',
+        loanPeriod: 24,
+        monthlyPayment: '¥26,435.55',
+        createdAt: '8/17/2025, 7:22:33 PM',
+        approvedBy: 'Admin',
+    },
+    { 
+        id: '996', 
+        name: 'Andreas Rudi Schmetzer', 
+        phone: '00491723789846', 
+        amount: '¥250,000', 
+        creditScore: 500, 
+        dateApproved: '8/9/2025, 1:16:15 PM',
+        idNumber: '448108318440',
+        address: '立川市富士見町5-14-7',
+        companyName: 'ケアレジデンス立川',
+        position: '介護士',
+        income: '¥270,000',
+        monthlyExpense: '¥310,000',
+        bankName: 'みずほ銀行 調布支店',
+        accountNumber: '8104188',
+        loanPeriod: 24,
+        monthlyPayment: '¥26,435.55',
+        createdAt: '8/17/2025, 7:22:33 PM',
+        approvedBy: 'Admin',
+    },
+    { 
+        id: '1001', 
+        name: '5555555555', 
+        phone: '5555555555', 
+        amount: '¥52,500', 
+        creditScore: 400, 
+        dateApproved: '8/7/2025, 3:45:49 PM',
+        idNumber: '448108318440',
+        address: '立川市富士見町5-14-7',
+        companyName: 'ケアレジデンス立川',
+        position: '介護士',
+        income: '¥270,000',
+        monthlyExpense: '¥310,000',
+        bankName: 'みずほ銀行 調布支店',
+        accountNumber: '8104188',
+        loanPeriod: 24,
+        monthlyPayment: '¥26,435.55',
+        createdAt: '8/17/2025, 7:22:33 PM',
+        approvedBy: 'Admin',
+    },
 ];
+
+
+const UserProfileDetail = ({ label, value }: { label: string, value: string | number | undefined }) => (
+    <div>
+        <p className="text-sm text-muted-foreground">{label}</p>
+        <p className="font-semibold">{value}</p>
+    </div>
+);
 
 
 export default function ManagementInfoPage() {
@@ -114,7 +236,53 @@ export default function ManagementInfoPage() {
                                         </DialogContent>
                                     </Dialog>
 
-                                    <Button size="sm"><Eye className="mr-1" /> View Profile</Button>
+                                    <Dialog>
+                                        <DialogTrigger asChild>
+                                            <Button size="sm"><Eye className="mr-1" /> View Profile</Button>
+                                        </DialogTrigger>
+                                        <DialogContent className="max-w-4xl">
+                                            <DialogHeader>
+                                                <DialogTitle className="flex items-center gap-2">
+                                                    <User className="h-6 w-6" />
+                                                    User Profile
+                                                </DialogTitle>
+                                            </DialogHeader>
+                                            <div className="grid grid-cols-2 gap-x-8 gap-y-4 p-4 max-h-[70vh] overflow-y-auto">
+                                                <UserProfileDetail label="Full Name" value={item.name} />
+                                                <UserProfileDetail label="Id Number" value={item.idNumber} />
+                                                <UserProfileDetail label="Phone" value={item.phone} />
+                                                <UserProfileDetail label="Address" value={item.address} />
+                                                <UserProfileDetail label="Company Name" value={item.companyName} />
+                                                <UserProfileDetail label="Position" value={item.position} />
+                                                <UserProfileDetail label="Income" value={item.income} />
+                                                <UserProfileDetail label="Monthly Expense" value={item.monthlyExpense} />
+                                                <UserProfileDetail label="Bank Name" value={item.bankName} />
+                                                <UserProfileDetail label="Account Number" value={item.accountNumber} />
+                                                <UserProfileDetail label="Loan Amount" value={item.amount} />
+                                                <UserProfileDetail label="Loan Period" value={item.loanPeriod} />
+                                                <UserProfileDetail label="Monthly Payment" value={item.monthlyPayment} />
+                                                <UserProfileDetail label="Created At" value={item.createdAt} />
+                                                <UserProfileDetail label="Approved Date" value={item.dateApproved} />
+                                                <UserProfileDetail label="Approved By" value={item.approvedBy} />
+                                                <UserProfileDetail label="Credit Score" value={item.creditScore} />
+                                                
+                                                <div className="col-span-1 mt-4">
+                                                    <h3 className="font-semibold mb-2 text-sm text-muted-foreground">Front ID:</h3>
+                                                    <Image src="https://placehold.co/400x250.png" alt="Front ID" width={400} height={250} className="rounded-md w-full" data-ai-hint="id card" />
+                                                </div>
+                                                <div className="col-span-1 mt-4">
+                                                    <h3 className="font-semibold mb-2 text-sm text-muted-foreground">Back ID:</h3>
+                                                    <Image src="https://placehold.co/400x250.png" alt="Back ID" width={400} height={250} className="rounded-md w-full" data-ai-hint="id card back" />
+                                                </div>
+                                            </div>
+                                            <DialogFooter>
+                                                <DialogClose asChild>
+                                                    <Button variant="outline">Close</Button>
+                                                </DialogClose>
+                                            </DialogFooter>
+                                        </DialogContent>
+                                    </Dialog>
+
                                     <Button size="sm" className="bg-yellow-500 hover:bg-yellow-600 text-white"><Edit className="mr-1" /> Modify Status</Button>
                                     <Button size="sm" className="bg-green-500 hover:bg-green-600 text-white"><CreditCard className="mr-1" /> Modify Bank</Button>
                                     <Button size="sm" className="bg-purple-500 hover:bg-purple-600 text-white"><CreditCard className="mr-1" /> Modify Credit Score</Button>
