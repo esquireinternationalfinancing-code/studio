@@ -204,7 +204,7 @@ const ModifyStatusDialogContent = ({ name }: { name: string }) => {
   return (
     <DialogContent>
         <DialogHeader>
-            <DialogTitle>Modify Loan Status & Notify Message for {name}</DialogTitle>
+            <DialogTitle>Modify Loan Status &amp; Notify Message for {name}</DialogTitle>
         </DialogHeader>
         <div className="space-y-4 py-4">
             <Input value={status} onChange={(e) => setStatus(e.target.value)} />
@@ -404,9 +404,69 @@ export default function ManagementInfoPage() {
                                             </DialogFooter>
                                         </DialogContent>
                                     </Dialog>
-                                    <Button size="sm" className="bg-purple-500 hover:bg-purple-600 text-white"><CreditCard className="mr-1" /> Modify Credit Score</Button>
-                                    <Button size="sm" variant="destructive"><Lock className="mr-1" /> Modify Password</Button>
-                                    <Button size="sm"><Banknote className="mr-1" /> Modify Amount</Button>
+                                     <Dialog>
+                                        <DialogTrigger asChild>
+                                            <Button size="sm" className="bg-purple-500 hover:bg-purple-600 text-white"><CreditCard className="mr-1" /> Modify Credit Score</Button>
+                                        </DialogTrigger>
+                                        <DialogContent>
+                                            <DialogHeader>
+                                                <DialogTitle>Modify Credit For {item.name}</DialogTitle>
+                                            </DialogHeader>
+                                            <div className="space-y-4 py-4">
+                                                <Input defaultValue={item.creditScore} />
+                                            </div>
+                                            <DialogFooter>
+                                                <DialogClose asChild>
+                                                    <Button variant="outline">Cancel</Button>
+                                                </DialogClose>
+                                                <DialogClose asChild>
+                                                    <Button>Save</Button>
+                                                </DialogClose>
+                                            </DialogFooter>
+                                        </DialogContent>
+                                    </Dialog>
+                                    <Dialog>
+                                        <DialogTrigger asChild>
+                                            <Button size="sm" variant="destructive"><Lock className="mr-1" /> Modify Password</Button>
+                                        </DialogTrigger>
+                                         <DialogContent>
+                                            <DialogHeader>
+                                                <DialogTitle>Modify Password For {item.name}</DialogTitle>
+                                            </DialogHeader>
+                                            <div className="space-y-4 py-4">
+                                                <Input type="password" placeholder="Enter new password" />
+                                            </div>
+                                            <DialogFooter>
+                                                <DialogClose asChild>
+                                                    <Button variant="outline">Cancel</Button>
+                                                </DialogClose>
+                                                <DialogClose asChild>
+                                                    <Button>Save</Button>
+                                                </DialogClose>
+                                            </DialogFooter>
+                                        </DialogContent>
+                                    </Dialog>
+                                    <Dialog>
+                                        <DialogTrigger asChild>
+                                            <Button size="sm"><Banknote className="mr-1" /> Modify Amount</Button>
+                                        </DialogTrigger>
+                                        <DialogContent>
+                                            <DialogHeader>
+                                                <DialogTitle>Modify Amount For {item.name}</DialogTitle>
+                                            </DialogHeader>
+                                            <div className="space-y-4 py-4">
+                                                <Input defaultValue={item.amount} />
+                                            </div>
+                                            <DialogFooter>
+                                                <DialogClose asChild>
+                                                    <Button variant="outline">Cancel</Button>
+                                                </DialogClose>
+                                                <DialogClose asChild>
+                                                    <Button>Save</Button>
+                                                </DialogClose>
+                                            </DialogFooter>
+                                        </DialogContent>
+                                    </Dialog>
                                     <Button size="sm" className="bg-slate-600 hover:bg-slate-700 text-white"><FileText className="mr-1" /> Clear Withdraw | Status</Button>
                                 </TableCell>
                             </TableRow>
@@ -424,3 +484,4 @@ export default function ManagementInfoPage() {
 }
 
     
+
