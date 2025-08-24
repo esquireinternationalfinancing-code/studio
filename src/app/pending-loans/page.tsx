@@ -2,6 +2,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import {
   Card,
   CardContent,
@@ -96,10 +97,12 @@ export default function PendingLoansPage() {
                                     <Badge variant="outline" className="text-yellow-600 border-yellow-600">{loan.status}</Badge>
                                 </TableCell>
                                 <TableCell className="flex gap-2 flex-wrap">
-                                    <Button size="sm" variant="default">
-                                        <Eye className="mr-1 h-4 w-4" />
-                                        View Profile
-                                    </Button>
+                                    <Link href={`/user-profile/${loan.id}`} passHref>
+                                      <Button size="sm" variant="default">
+                                          <Eye className="mr-1 h-4 w-4" />
+                                          View Profile
+                                      </Button>
+                                    </Link>
                                     <Button size="sm" className="bg-yellow-500 hover:bg-yellow-600 text-white">
                                         <Edit className="mr-1 h-4 w-4" />
                                         Update Loan
