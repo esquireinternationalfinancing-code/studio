@@ -33,7 +33,7 @@ export interface User {
 }
 
 
-// IMPORTANT: Replace this with your actual API base URL.
+// IMPORTANT: Make sure this is the correct base URL for your API.
 const API_BASE_URL = 'https://api.sxafinancelending.com/v1';
 const API_KEY = process.env.NEXT_PUBLIC_SXA_FINANCE_API_KEY;
 
@@ -46,7 +46,7 @@ export const getLoans = async (): Promise<Loan[]> => {
     console.log("Fetching loans from the Sxa Finance Lending API...");
     
     if (!API_KEY) {
-        console.error("API Key is not configured. Please check your .env.local file.");
+        console.error("API Key is not configured. Please check your .env.local file and ensure NEXT_PUBLIC_SXA_FINANCE_API_KEY is set.");
         // Return empty array or throw an error to prevent the app from crashing.
         return [];
     }
