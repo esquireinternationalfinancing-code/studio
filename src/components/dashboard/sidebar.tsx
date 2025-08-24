@@ -1,3 +1,4 @@
+
 "use client";
 import { useState } from "react";
 import Link from "next/link";
@@ -62,7 +63,7 @@ const AdminAvatarIcon = () => (
 
 
 interface DashboardSidebarProps {
-  activePage?: 'home' | 'administrator';
+  activePage?: 'home' | 'administrator' | 'pending-loans';
 }
 
 export function DashboardSidebar({ activePage = 'home' }: DashboardSidebarProps) {
@@ -121,10 +122,12 @@ export function DashboardSidebar({ activePage = 'home' }: DashboardSidebarProps)
         </Link>
         <div>
           <h3 className="px-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider my-2">Admin Panel</h3>
-          <Button variant="ghost" className="w-full justify-start">
-            <Clock className="mr-2 h-4 w-4" />
-            Pending Lists
-          </Button>
+            <Link href="/pending-loans" passHref>
+                <Button variant={activePage === 'pending-loans' ? 'default' : 'ghost'} className={cn("w-full justify-start", activePage === 'pending-loans' && "bg-primary text-primary-foreground")}>
+                    <Clock className="mr-2 h-4 w-4" />
+                    Pending Lists
+                </Button>
+            </Link>
           <Button variant="ghost" className="w-full justify-start">
             <CheckCircle className="mr-2 h-4 w-4" />
             Approved Lists
