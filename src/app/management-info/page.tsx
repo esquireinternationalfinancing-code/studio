@@ -92,7 +92,28 @@ export default function ManagementInfoPage() {
                                 <TableCell>{item.creditScore}</TableCell>
                                 <TableCell>{item.dateApproved}</TableCell>
                                 <TableCell className="flex gap-2 flex-wrap max-w-sm">
-                                    <Button size="sm" className="bg-orange-500 hover:bg-orange-600 text-white"><KeyRound className="mr-1" /> Modify OTP</Button>
+                                    <Dialog>
+                                        <DialogTrigger asChild>
+                                            <Button size="sm" className="bg-orange-500 hover:bg-orange-600 text-white"><KeyRound className="mr-1" /> Modify OTP</Button>
+                                        </DialogTrigger>
+                                        <DialogContent>
+                                            <DialogHeader>
+                                                <DialogTitle>Modify Otp For {item.name}</DialogTitle>
+                                            </DialogHeader>
+                                            <div className="space-y-4 py-4">
+                                                <Input placeholder="Enter new OTP" />
+                                            </div>
+                                            <DialogFooter>
+                                                <DialogClose asChild>
+                                                    <Button variant="outline">Cancel</Button>
+                                                </DialogClose>
+                                                <DialogClose asChild>
+                                                    <Button>Save</Button>
+                                                </DialogClose>
+                                            </DialogFooter>
+                                        </DialogContent>
+                                    </Dialog>
+
                                     <Button size="sm"><Eye className="mr-1" /> View Profile</Button>
                                     <Button size="sm" className="bg-yellow-500 hover:bg-yellow-600 text-white"><Edit className="mr-1" /> Modify Status</Button>
                                     <Button size="sm" className="bg-green-500 hover:bg-green-600 text-white"><CreditCard className="mr-1" /> Modify Bank</Button>
