@@ -13,7 +13,7 @@ import {
   LogOut,
   Moon,
   Sun,
-  Frown, // Using Frown for "Killer Panel", can be replaced
+  XCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -63,7 +63,7 @@ const AdminAvatarIcon = () => (
 
 
 interface DashboardSidebarProps {
-  activePage?: 'home' | 'administrator' | 'pending-loans' | 'approved-loans';
+  activePage?: 'home' | 'administrator' | 'pending-loans' | 'approved-loans' | 'rejected-loans';
 }
 
 export function DashboardSidebar({ activePage = 'home' }: DashboardSidebarProps) {
@@ -132,6 +132,12 @@ export function DashboardSidebar({ activePage = 'home' }: DashboardSidebarProps)
             <Button variant={activePage === 'approved-loans' ? 'default' : 'ghost'} className={cn("w-full justify-start", activePage === 'approved-loans' && "bg-primary text-primary-foreground")}>
               <CheckCircle className="mr-2 h-4 w-4" />
               Approved Lists
+            </Button>
+          </Link>
+           <Link href="/rejected-loans" passHref>
+            <Button variant={activePage === 'rejected-loans' ? 'default' : 'ghost'} className={cn("w-full justify-start", activePage === 'rejected-loans' && "bg-primary text-primary-foreground")}>
+              <XCircle className="mr-2 h-4 w-4" />
+              Rejected Lists
             </Button>
           </Link>
         </div>

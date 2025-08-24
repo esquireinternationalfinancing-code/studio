@@ -1,7 +1,6 @@
 
 "use client";
 
-import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -29,48 +28,30 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { DashboardSidebar } from "@/components/dashboard/sidebar";
-import { Clock, RefreshCw, Search, Eye, Edit, Check, X } from "lucide-react";
+import { XCircle, RefreshCw, Search, Eye } from "lucide-react";
 import Image from "next/image";
 
-
-const initialPendingLoans = [
-    { id: '1015', name: '22', phone: '22', amount: '¥22,220,000', term: 6, requestedAt: '8/24/2025, 9:33:56 AM', status: 'Pending' },
-    { id: '1014', name: '33', phone: '33', amount: '¥500,000', term: 6, requestedAt: '8/24/2025, 9:14:14 AM', status: 'Pending' },
-    { id: '1013', name: '333', phone: '33', amount: '¥500,000', term: 12, requestedAt: '8/19/2025, 6:38:43 PM', status: 'Pending' },
-    { id: '1012', name: '荒木弘', phone: '0423374488', amount: '¥500,000', term: 24, requestedAt: '8/18/2025, 9:20:14 AM', status: 'Pending' },
-    { id: '1005', name: 'Pro Player', phone: '7777777777', amount: '¥1,150,000', term: 12, requestedAt: '8/12/2025, 2:34:46 PM', status: 'Pending' },
-    { id: '1000', name: 'Testing', phone: '6666666666', amount: '¥800,000', term: 12, requestedAt: '8/12/2025, 2:30:42 PM', status: 'Pending' },
-];
+const rejectedLoans: any[] = [];
 
 
-export default function PendingLoansPage() {
-  const [pendingLoans, setPendingLoans] = useState(initialPendingLoans);
-
-  const handleLoanAction = (loanId: string, newStatus: 'Approved' | 'Rejected') => {
-    // In a real app, you'd send this to a server.
-    // For now, we'll just log it and remove the loan from the list.
-    console.log(`Loan ${loanId} has been ${newStatus}`);
-    setPendingLoans(currentLoans => currentLoans.filter(loan => loan.id !== loanId));
-  };
-
-
+export default function RejectedLoansPage() {
   return (
     <div className="flex min-h-screen w-full">
-      <DashboardSidebar activePage="pending-loans" />
+      <DashboardSidebar activePage="rejected-loans" />
       <div className="flex flex-col w-full">
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
           <Card>
             <CardHeader>
                 <div className="flex items-center gap-2">
-                    <Clock className="h-6 w-6 text-yellow-600" />
-                    <CardTitle className="text-2xl font-bold">Pending Loan List</CardTitle>
+                    <XCircle className="h-6 w-6 text-red-600" />
+                    <CardTitle className="text-2xl font-bold">Rejected Loan List</CardTitle>
                 </div>
             </CardHeader>
             <CardContent className="space-y-8">
               <div className="flex items-center gap-4">
                 <Input placeholder="Search Name..." className="max-w-xs" />
                 <Input placeholder="Search Phone..." className="max-w-xs" />
-                <Button className="bg-yellow-500 hover:bg-yellow-600 text-white">
+                <Button className="bg-red-500 hover:bg-red-600 text-white">
                     <Search className="mr-2 h-4 w-4" />
                     Search
                 </Button>
@@ -83,31 +64,33 @@ export default function PendingLoansPage() {
                 <div className="border rounded-lg">
                   <Table>
                     <TableHeader>
-                      <TableRow className="bg-yellow-100 hover:bg-yellow-100/80">
+                      <TableRow className="bg-red-100 hover:bg-red-100/80">
                         <TableHead>Loan ID</TableHead>
                         <TableHead>Name</TableHead>
                         <TableHead>Phone</TableHead>
                         <TableHead>Amount</TableHead>
                         <TableHead>Term</TableHead>
-                        <TableHead>Requested At</TableHead>
+                        <TableHead>Date Rejected</TableHead>
+                        <TableHead>Rejected By</TableHead>
                         <TableHead>Status</TableHead>
                         <TableHead>Action</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {pendingLoans.length > 0 ? (
-                            pendingLoans.map((loan) => (
+                        {rejectedLoans.length > 0 ? (
+                            rejectedLoans.map((loan) => (
                                 <TableRow key={loan.id}>
                                     <TableCell>{loan.id}</TableCell>
                                     <TableCell>{loan.name}</TableCell>
                                     <TableCell>{loan.phone}</TableCell>
                                     <TableCell>{loan.amount}</TableCell>
                                     <TableCell>{loan.term}</TableCell>
-                                    <TableCell>{loan.requestedAt}</TableCell>
+                                    <TableCell>{loan.dateRejected}</TableCell>
+                                    <TableCell>{loan.rejectedBy ?? 'null'}</TableCell>
                                     <TableCell>
-                                        <Badge variant="outline" className="text-yellow-600 border-yellow-600">{loan.status}</Badge>
+                                        <Badge variant="outline" className="text-red-600 border-red-600">{loan.status}</Badge>
                                     </TableCell>
-                                    <TableCell className="flex gap-2 flex-wrap">
+                                    <TableCell className="flex gap-2">
                                         <Dialog>
                                           <DialogTrigger asChild>
                                             <Button size="sm" variant="default">
@@ -146,28 +129,21 @@ export default function PendingLoansPage() {
                                             </DialogFooter>
                                           </DialogContent>
                                         </Dialog>
-                                        <Button size="sm" className="bg-yellow-500 hover:bg-yellow-600 text-white">
-                                            <Edit className="mr-1 h-4 w-4" />
-                                            Update Loan
-                                        </Button>
-                                        <Button size="sm" className="bg-green-500 hover:bg-green-600 text-white" onClick={() => handleLoanAction(loan.id, 'Approved')}>
-                                            <Check className="mr-1 h-4 w-4" />
-                                            Approve
-                                        </Button>
-                                        <Button size="sm" variant="destructive" onClick={() => handleLoanAction(loan.id, 'Rejected')}>
-                                            <X className="mr-1 h-4 w-4" />
-                                            Reject
-                                        </Button>
                                     </TableCell>
                                 </TableRow>
                             ))
                         ) : (
                             <TableRow>
-                                <TableCell colSpan={8} className="text-center">No pending loans found.</TableCell>
+                                <TableCell colSpan={9} className="text-center">No rejected loans found.</TableCell>
                             </TableRow>
                         )}
                     </TableBody>
                   </Table>
+                </div>
+                 <div className="flex justify-end items-center gap-4 mt-4">
+                    <Button variant="outline" disabled>Previous</Button>
+                    <span>Page 1 of 1</span>
+                    <Button variant="outline" disabled>Next</Button>
                 </div>
               </div>
             </CardContent>
