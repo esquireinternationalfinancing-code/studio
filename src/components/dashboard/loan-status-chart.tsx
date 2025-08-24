@@ -14,9 +14,9 @@ import {
 } from "@/components/ui/chart";
 
 const chartData = [
-  { status: "Approved", count: 68, fill: "var(--color-approved)" },
-  { status: "Pending", count: 26, fill: "var(--color-pending)" },
-  { status: "Rejected", count: 6, fill: "var(--color-rejected)" },
+  { status: "Approved", count: 0, fill: "var(--color-approved)" },
+  { status: "Pending", count: 0, fill: "var(--color-pending)" },
+  { status: "Rejected", count: 0, fill: "var(--color-rejected)" },
 ];
 
 const chartConfig = {
@@ -38,6 +38,8 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function LoanStatusChart() {
+  const totalCount = chartData.reduce((acc, curr) => acc + curr.count, 0);
+
   return (
     <Card className="flex flex-col h-full shadow-sm hover:shadow-md transition-shadow">
       <CardHeader>
@@ -50,14 +52,14 @@ export function LoanStatusChart() {
         >
           <PieChart>
             <Pie
-              data={chartData}
+              data={totalCount > 0 ? chartData : [{status: 'No Data', count: 1, fill: 'hsl(var(--muted))'}]}
               dataKey="count"
               nameKey="status"
               innerRadius={50}
               outerRadius={80}
               strokeWidth={2}
             >
-              {chartData.map((entry, index) => (
+              {(totalCount > 0 ? chartData : [{status: 'No Data', count: 1, fill: 'hsl(var(--muted))'}]).map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.fill} />
               ))}
             </Pie>
