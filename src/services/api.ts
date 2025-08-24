@@ -23,109 +23,43 @@ export interface Loan {
     password?: string;
 }
 
-// In-memory store for demonstration purposes
-let loansStore: Loan[] = [
-    { 
-        id: '1007', 
-        name: '雲雀恭子', 
-        phone: '00425409066', 
-        amount: '¥500,000', 
-        creditScore: 500, 
-        dateApproved: '8/19/2025, 9:29:53 AM',
-        idNumber: '448108318440',
-        address: '立川市富士見町5-14-7',
-        companyName: 'ケアレジデンス立川',
-        position: '介護士',
-        income: '¥270,000',
-        monthlyExpense: '¥310,000',
-        bankName: 'みずほ銀行 調布支店',
-        accountNumber: '8104188',
-        loanPeriod: 24,
-        monthlyPayment: '¥26,435.55',
-        createdAt: '8/17/2025, 7:22:33 PM',
-        approvedBy: 'Admin',
-        status: 'Approved'
-    },
-    { 
-        id: '1008', 
-        name: '雲雀恭子', 
-        phone: '0425409066', 
-        amount: '¥500,000', 
-        creditScore: 500, 
-        dateApproved: '8/19/2025, 9:29:48 AM',
-        idNumber: '448108318440',
-        address: '立川市富士見町5-14-7',
-        companyName: 'ケアレジデンス立川',
-        position: '介護士',
-        income: '¥270,000',
-        monthlyExpense: '¥310,000',
-        bankName: 'みずほ銀行 調布支店',
-        accountNumber: '8104188',
-        loanPeriod: 24,
-        monthlyPayment: '¥26,435.55',
-        createdAt: '8/17/2025, 7:22:33 PM',
-        approvedBy: 'Admin',
-        status: 'Approved'
-    },
-    { 
-        id: '1009', 
-        name: '荒木弘', 
-        phone: '0423374488', 
-        amount: '¥0', 
-        creditScore: 400, 
-        dateApproved: '8/18/2025, 9:03:17 AM',
-        idNumber: '448108318440',
-        address: '立川市富士見町5-14-7',
-        companyName: 'ケアレジデンス立川',
-        position: '介護士',
-        income: '¥270,000',
-        monthlyExpense: '¥310,000',
-        bankName: 'みずほ銀行 調布支店',
-        accountNumber: '8104188',
-        loanPeriod: 24,
-        monthlyPayment: '¥26,435.55',
-        createdAt: '8/17/2025, 7:22:33 PM',
-        approvedBy: 'Admin',
-        status: 'Rejected'
-    },
-    { 
-        id: '1006', 
-        name: '原正弘', 
-        phone: '0569559921', 
-        amount: '¥500,000', 
-        creditScore: 500, 
-        dateApproved: '8/13/2025, 12:20:55 PM',
-        idNumber: '448108318440',
-        address: '立川市富士見町5-14-7',
-        companyName: 'ケアレジデンス立川',
-        position: '介護士',
-        income: '¥270,000',
-        monthlyExpense: '¥310,000',
-        bankName: 'みずほ銀行 調布支店',
-        accountNumber: '8104188',
-        loanPeriod: 24,
-        monthlyPayment: '¥26,435.55',
-        createdAt: '8/17/2025, 7:22:33 PM',
-        approvedBy: 'Admin',
-        status: 'Approved'
-    },
-];
+// IMPORTANT: Replace this with your actual API base URL.
+const API_BASE_URL = 'https://api.sxafinancelending.com/v1';
+const API_KEY = process.env.NEXT_PUBLIC_SXA_FINANCE_API_KEY;
 
-// MOCK API FUNCTIONS
 
 /**
  * Fetches the list of loans from the Sxa Finance Lending platform.
  * @returns A promise that resolves to an array of loans.
  */
 export const getLoans = async (): Promise<Loan[]> => {
-    console.log("Fetching loans from the API...");
-    // Simulate a network delay
-    await new Promise(resolve => setTimeout(resolve, 500));
-    // In a real application, this would be a fetch call:
-    // const response = await fetch('https://api.sxafinancelending.com/loans');
-    // const data = await response.json();
-    // return data;
-    return Promise.resolve(loansStore);
+    console.log("Fetching loans from the Sxa Finance Lending API...");
+    
+    if (!API_KEY) {
+        console.error("API Key is not configured. Please check your .env.local file.");
+        // Return empty array or throw an error to prevent the app from crashing.
+        return [];
+    }
+    
+    try {
+        const response = await fetch(`${API_BASE_URL}/loans`, {
+            headers: {
+                'Authorization': `Bearer ${API_KEY}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`API call failed with status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Failed to fetch loans:", error);
+        // In a real app, you might want to show a notification to the user.
+        return []; // Return an empty array on error to avoid crashing the UI.
+    }
 };
 
 /**
@@ -136,29 +70,30 @@ export const getLoans = async (): Promise<Loan[]> => {
  */
 export const updateLoan = async (loanId: string, updates: Partial<Loan>): Promise<Loan> => {
     console.log(`Updating loan ${loanId} with:`, updates);
-     // Simulate a network delay
-    await new Promise(resolve => setTimeout(resolve, 300));
 
-    const loanIndex = loansStore.findIndex(loan => loan.id === loanId);
-    if (loanIndex === -1) {
-        throw new Error("Loan not found");
+    if (!API_KEY) {
+        console.error("API Key is not configured.");
+        throw new Error("API Key not found");
     }
 
-    loansStore[loanIndex] = { ...loansStore[loanIndex], ...updates };
+    try {
+        const response = await fetch(`${API_BASE_URL}/loans/${loanId}`, {
+            method: 'PATCH',
+            headers: {
+                'Authorization': `Bearer ${API_KEY}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updates),
+        });
 
-    // In a real application, this would be a fetch call:
-    // const response = await fetch(`https://api.sxafinancelending.com/loans/${loanId}`, {
-    //     method: 'PATCH',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify(updates),
-    // });
-    // const data = await response.json();
-    // return data;
-    
-    console.log("Updated Store:", loansStore);
-    return Promise.resolve(loansStore[loanIndex]);
+        if (!response.ok) {
+            throw new Error(`API call failed with status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error(`Failed to update loan ${loanId}:`, error);
+        throw error; // Re-throw the error so the UI can handle it (e.g., show a toast).
+    }
 };
-
-// Add other functions as needed, e.g., createLoan, deleteLoan, etc.
-
-    
