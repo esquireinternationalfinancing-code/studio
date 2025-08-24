@@ -63,7 +63,7 @@ const AdminAvatarIcon = () => (
 
 
 interface DashboardSidebarProps {
-  activePage?: 'home' | 'administrator' | 'pending-loans';
+  activePage?: 'home' | 'administrator' | 'pending-loans' | 'approved-loans';
 }
 
 export function DashboardSidebar({ activePage = 'home' }: DashboardSidebarProps) {
@@ -128,10 +128,12 @@ export function DashboardSidebar({ activePage = 'home' }: DashboardSidebarProps)
                     Pending Lists
                 </Button>
             </Link>
-          <Button variant="ghost" className="w-full justify-start">
-            <CheckCircle className="mr-2 h-4 w-4" />
-            Approved Lists
-          </Button>
+          <Link href="/approved-loans" passHref>
+            <Button variant={activePage === 'approved-loans' ? 'default' : 'ghost'} className={cn("w-full justify-start", activePage === 'approved-loans' && "bg-primary text-primary-foreground")}>
+              <CheckCircle className="mr-2 h-4 w-4" />
+              Approved Lists
+            </Button>
+          </Link>
         </div>
         <div>
           <h3 className="px-4 text-xs font-semibold text-accent my-2 uppercase tracking-wider">Killer Panel</h3>
