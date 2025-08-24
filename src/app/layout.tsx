@@ -6,8 +6,8 @@ import { Toaster } from "@/components/ui/toaster";
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
-  title: "Insight Board",
-  description: "A dashboard for key business metrics.",
+  title: "Loan App Dashboard",
+  description: "A dashboard for managing loan applications.",
 };
 
 export default function RootLayout({
@@ -18,7 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`font-body antialiased ${inter.variable}`}>
-        {children}
+        <div className="flex min-h-screen w-full flex-col bg-background">
+          {children}
+        </div>
         <Toaster />
       </body>
     </html>

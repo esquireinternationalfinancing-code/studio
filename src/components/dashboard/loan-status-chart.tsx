@@ -1,6 +1,6 @@
 "use client";
 
-import { Pie, PieChart } from "recharts";
+import { Pie, PieChart, Cell } from "recharts";
 import {
   Card,
   CardContent,
@@ -11,16 +11,12 @@ import {
 import {
   ChartConfig,
   ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-  ChartLegend,
-  ChartLegendContent,
 } from "@/components/ui/chart";
 
 const chartData = [
-  { status: "approved", count: 275 },
-  { status: "pending", count: 200 },
-  { status: "rejected", count: 187 },
+  { status: "Approved", count: 68, fill: "var(--color-approved)" },
+  { status: "Pending", count: 26, fill: "var(--color-pending)" },
+  { status: "Rejected", count: 6, fill: "var(--color-rejected)" },
 ];
 
 const chartConfig = {
@@ -43,34 +39,41 @@ const chartConfig = {
 
 export function LoanStatusChart() {
   return (
-    <Card className="flex flex-col h-full">
+    <Card className="flex flex-col h-full shadow-sm hover:shadow-md transition-shadow">
       <CardHeader>
-        <CardTitle className="font-headline">Loan Status</CardTitle>
-        <CardDescription>Breakdown of loan application statuses</CardDescription>
+        <CardTitle>Loan Status Overview</CardTitle>
       </CardHeader>
-      <CardContent className="flex-1 pb-0">
+      <CardContent className="flex-1 pb-4">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[300px]"
+          className="mx-auto aspect-square max-h-[250px]"
         >
           <PieChart>
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
             <Pie
               data={chartData}
               dataKey="count"
               nameKey="status"
-              innerRadius={60}
-              strokeWidth={5}
-            />
-            <ChartLegend
-              content={<ChartLegendContent nameKey="status" />}
-              className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center"
-            />
+              innerRadius={50}
+              outerRadius={80}
+              strokeWidth={2}
+            >
+              {chartData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={entry.fill} />
+              ))}
+            </Pie>
           </PieChart>
         </ChartContainer>
+        <div className="flex flex-col items-center justify-center gap-2 mt-4 text-sm">
+           {chartData.map((entry) => (
+             <div key={entry.status} className="flex items-center gap-2 w-full max-w-[200px]">
+               <div className="w-1/3 flex items-center">
+                 <span className="w-3 h-3 mr-2" style={{ backgroundColor: entry.fill }} />
+                 <span>{entry.status}</span>
+               </div>
+               <div className="w-2/3 text-left font-semibold">{entry.status}: {entry.count}%</div>
+             </div>
+           ))}
+        </div>
       </CardContent>
     </Card>
   );
