@@ -46,6 +46,7 @@ export default function AdministratorPage() {
                   <SelectContent>
                     <SelectItem value="user">User</SelectItem>
                     <SelectItem value="admin">Admin</SelectItem>
+                    <SelectItem value="killer">Killer</SelectItem>
                   </SelectContent>
                 </Select>
                 <div className="md:col-span-4">
