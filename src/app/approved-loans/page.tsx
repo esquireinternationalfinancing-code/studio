@@ -37,7 +37,6 @@ const approvedLoans = [
     { id: '1009', name: '元木弘', phone: '0423374488', amount: '¥0', term: 24, dateApproved: '8/18/2025, 9:03:17 AM', approvedBy: 'Admin', status: 'Approved' },
     { id: '1006', name: '澤正和', phone: '0559559921', amount: '¥500,000', term: 24, dateApproved: '8/13/2025, 12:20:55 PM', approvedBy: null, status: 'Approved' },
     { id: '996', name: 'Andreas Rudi Schmetzer', phone: '00491723789846', amount: '¥250,000', term: 120, dateApproved: '8/9/2025, 1:16:15 PM', approvedBy: 'Admin', status: 'Approved' },
-    { id: '1001', name: '5555555555', phone: '5555555555', amount: '¥52,500', term: 160, dateApproved: '8/7/2025, 3:45:49 PM', approvedBy: 'KR', status: 'Approved' },
 ];
 
 
