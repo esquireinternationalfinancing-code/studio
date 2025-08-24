@@ -33,32 +33,22 @@ const CustomIcon = () => (
 );
 
 const AdminAvatarIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 100 100"
-    className="h-full w-full"
-    width="100"
-    height="100"
-  >
-    <circle cx="50" cy="50" r="45" fill="#4285f4" />
-    <g transform="translate(0, 5)">
-      <path
-        d="M50 80 C 35 80, 30 70, 30 55 L 70 55 C 70 70, 65 80, 50 80"
-        fill="#ffffff"
-      />
-      <circle cx="50" cy="35" r="15" fill="#ffffff" />
-    </g>
-    <g transform="translate(0, 18)">
-      <path
-        d="M50 25 C 40 25, 40 35, 50 35 C 60 35, 60 25, 50 25"
-        fill="#f4b400"
-      />
-      <path
-        d="M50 40 C 40 40, 35 50, 50 60 C 65 50, 60 40, 50 40"
-        fill="#f4b400"
-      />
-    </g>
-  </svg>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      className="h-full w-full"
+      width="100"
+      height="100"
+    >
+      <circle cx="50" cy="50" r="45" fill="#4A90E2" />
+      <g transform="translate(0, 5)">
+        <path
+          d="M50 75 C 35 75, 30 65, 30 50 L 70 50 C 70 65, 65 75, 50 75"
+          fill="#FFFFFF"
+        />
+        <circle cx="50" cy="30" r="12" fill="#FFFFFF" />
+      </g>
+    </svg>
 );
 
 
