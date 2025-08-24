@@ -28,52 +28,52 @@ export default function Home() {
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:col-span-2 xl:grid-cols-5">
               <MetricCard
                 title="Registered Today"
-                value="5"
+                value="0"
                 icon={Users}
               />
               <MetricCard
                 title="Registered Total"
-                value="120"
+                value="0"
                 icon={Users}
               />
               <MetricCard
                 title="Min Loan Today"
-                value="¥10,000"
+                value="¥0"
                 icon={Banknote}
               />
               <MetricCard
                 title="Max Loan Today"
-                value="¥200,000"
+                value="¥0"
                 icon={Landmark}
               />
               <MetricCard
                 title="Deposit Today"
-                value="¥350,000"
+                value="¥0"
                 icon={CircleDollarSign}
               />
               <MetricCard
                 title="Approved Loans"
-                value="32"
+                value="0"
                 icon={CheckCircle}
               />
               <MetricCard
                 title="Pending Loans"
-                value="12"
+                value="0"
                 icon={Clock}
               />
               <MetricCard
                 title="Rejected Loans"
-                value="3"
+                value="0"
                 icon={XCircle}
               />
               <MetricCard
                 title="Avg Loan Amount"
-                value="¥70,000"
+                value="¥0"
                 icon={TrendingUp}
               />
               <MetricCard
                 title="Total Loans"
-                value="82"
+                value="0"
                 icon={Scale}
               />
             </div>
