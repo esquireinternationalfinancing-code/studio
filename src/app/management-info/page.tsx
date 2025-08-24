@@ -169,10 +169,20 @@ const ModifyStatusDialogContent = ({ name }: { name: string }) => {
   const [status, setStatus] = useState("Approved");
   const [message, setMessage] = useState("Congratulations, Your loan has been approved. Contact our finance to obtain OTP code");
 
-  const handleCheckboxChange = (checked: boolean | 'indeterminate') => {
+  const handleCheckboxChange = (checked: boolean | 'indeterminate', type: string) => {
     if (checked) {
-      setStatus("Pending");
-      setMessage("Your loan application is currently pending review.");
+        switch (type) {
+            case 'pending':
+                setStatus("Pending");
+                setMessage("Your loan application is currently pending review.");
+                break;
+            case 'bank-incorrect':
+                setStatus("Bank Information Incorrect");
+                setMessage("There appears to be an issue with the bank information you provided. Please review and update your details to proceed.");
+                break;
+            default:
+                break;
+        }
     } else {
       setStatus("Approved");
       setMessage("Congratulations, Your loan has been approved. Contact our finance to obtain OTP code");
@@ -189,11 +199,11 @@ const ModifyStatusDialogContent = ({ name }: { name: string }) => {
             <Textarea value={message} onChange={(e) => setMessage(e.target.value)} />
             <div className="space-y-2">
                 <div className="flex items-center space-x-2">
-                    <Checkbox id={`pending-${name}`} onCheckedChange={handleCheckboxChange} />
+                    <Checkbox id={`pending-${name}`} onCheckedChange={(checked) => handleCheckboxChange(checked, 'pending')} />
                     <Label htmlFor={`pending-${name}`}>Pending</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                    <Checkbox id={`bank-incorrect-${name}`} />
+                    <Checkbox id={`bank-incorrect-${name}`} onCheckedChange={(checked) => handleCheckboxChange(checked, 'bank-incorrect')} />
                     <Label htmlFor={`bank-incorrect-${name}`}>Bank Information Incorrect</Label>
                 </div>
                 <div className="flex items-center space-x-2">
