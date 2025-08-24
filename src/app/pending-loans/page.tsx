@@ -31,75 +31,65 @@ import { Badge } from "@/components/ui/badge";
 import { DashboardSidebar } from "@/components/dashboard/sidebar";
 import { Clock, RefreshCw, Search, Eye, Edit, Check, X } from "lucide-react";
 import Image from "next/image";
-
-
-const initialPendingLoans = [
-    { id: '1015', name: '22', phone: '22', amount: '¥22,220,000', term: 6, requestedAt: '8/24/2025, 9:33:56 AM', status: 'Pending' },
-    { id: '1014', name: '33', phone: '33', amount: '¥500,000', term: 6, requestedAt: '8/24/2025, 9:14:14 AM', status: 'Pending' },
-    { id: '1013', name: '333', phone: '33', amount: '¥500,000', term: 12, requestedAt: '8/19/2025, 6:38:43 PM', status: 'Pending' },
-    { id: '1012', name: '荒木弘', phone: '0423374488', amount: '¥500,000', term: 24, requestedAt: '8/18/2025, 9:20:14 AM', status: 'Pending' },
-    { id: '1005', name: 'Pro Player', phone: '7777777777', amount: '¥1,150,000', term: 12, requestedAt: '8/12/2025, 2:34:46 PM', status: 'Pending' },
-    { id: '1000', name: 'Testing', phone: '6666666666', amount: '¥800,000', term: 12, requestedAt: '8/12/2025, 2:30:42 PM', status: 'Pending' },
-];
-
-interface Loan {
-  id: string;
-  name: string;
-  phone: string;
-  amount: string;
-  term: number;
-  requestedAt: string;
-  status: string;
-}
+import type { Loan } from "@/services/api";
+import { getLoans, updateLoan } from "@/services/api";
+import { useToast } from "@/hooks/use-toast";
 
 
 export default function PendingLoansPage() {
   const [pendingLoans, setPendingLoans] = useState<Loan[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const { toast } = useToast();
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    const allLoans = await getLoans();
+    const pending = allLoans.filter(loan => loan.status === 'Pending');
+    setPendingLoans(pending);
+    setIsLoading(false);
+  };
 
   useEffect(() => {
-    const storedPendingLoans = localStorage.getItem('pendingLoans');
-    if (storedPendingLoans) {
-      setPendingLoans(JSON.parse(storedPendingLoans));
-    } else {
-      setPendingLoans(initialPendingLoans);
-    }
+    fetchData();
   }, []);
 
-  const updateLocalStorage = (updatedLoans: Loan[]) => {
-      localStorage.setItem('pendingLoans', JSON.stringify(updatedLoans));
-  };
 
+  const handleLoanAction = async (loanId: string, newStatus: 'Approved' | 'Rejected') => {
+    try {
+        const loanToMove = pendingLoans.find(loan => loan.id === loanId);
+        if (!loanToMove) return;
 
-  const handleLoanAction = (loanId: string, newStatus: 'Approved' | 'Rejected') => {
-    const loanToMove = pendingLoans.find(loan => loan.id === loanId);
-    if (!loanToMove) return;
+        const updateData: Partial<Loan> = { status: newStatus };
+        if (newStatus === 'Rejected') {
+            // In a real app, you might want specific fields for rejection dates/reasons.
+        } else if (newStatus === 'Approved') {
+            (updateData as any).dateApproved = new Date().toLocaleString();
+            (updateData as any).approvedBy = 'Admin';
+        }
+        
+        await updateLoan(loanId, updateData);
 
-    const updatedPendingLoans = pendingLoans.filter(loan => loan.id !== loanId);
-    setPendingLoans(updatedPendingLoans);
-    updateLocalStorage(updatedPendingLoans);
+        toast({
+            title: `Loan ${newStatus}`,
+            description: `Loan ID ${loanId} has been successfully ${newStatus.toLowerCase()}.`
+        });
 
-    if (newStatus === 'Rejected') {
-      const rejectedLoan = { 
-        ...loanToMove, 
-        status: 'Rejected', 
-        dateRejected: new Date().toLocaleString(),
-        rejectedBy: 'Admin'
-      };
-      const currentRejected = JSON.parse(localStorage.getItem('rejectedLoans') || '[]');
-      localStorage.setItem('rejectedLoans', JSON.stringify([rejectedLoan, ...currentRejected]));
-    } else if (newStatus === 'Approved') {
-        const approvedLoan = {
-            ...loanToMove,
-            status: 'Approved',
-            dateApproved: new Date().toLocaleString(),
-            approvedBy: 'Admin'
-        };
-        const currentApproved = JSON.parse(localStorage.getItem('approvedLoans') || '[]');
-        localStorage.setItem('approvedLoans', JSON.stringify([approvedLoan, ...currentApproved]));
+        fetchData(); // Refresh the list from the API
+    } catch (error) {
+        toast({
+            variant: "destructive",
+            title: "Update Failed",
+            description: `Could not update loan ${loanId}. Please try again.`
+        });
+        console.error(`Failed to update loan ${loanId}:`, error);
     }
-    
-    console.log(`Loan ${loanId} has been ${newStatus}`);
   };
+  
+  const filteredLoans = pendingLoans.filter(loan =>
+    loan.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    loan.phone.includes(searchTerm)
+  );
 
 
   return (
@@ -116,13 +106,17 @@ export default function PendingLoansPage() {
             </CardHeader>
             <CardContent className="space-y-8">
               <div className="flex items-center gap-4">
-                <Input placeholder="Search Name..." className="max-w-xs" />
-                <Input placeholder="Search Phone..." className="max-w-xs" />
-                <Button className="bg-yellow-500 hover:bg-yellow-600 text-white">
+                <Input 
+                  placeholder="Search Name or Phone..." 
+                  className="max-w-xs"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <Button onClick={() => setSearchTerm('')}>
                     <Search className="mr-2 h-4 w-4" />
                     Search
                 </Button>
-                <Button variant="outline">
+                <Button variant="outline" onClick={fetchData}>
                     <RefreshCw className="h-4 w-4" />
                 </Button>
               </div>
@@ -143,15 +137,17 @@ export default function PendingLoansPage() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {pendingLoans.length > 0 ? (
-                            pendingLoans.map((loan) => (
+                        {isLoading ? (
+                            <TableRow><TableCell colSpan={8} className="text-center">Loading...</TableCell></TableRow>
+                        ) : filteredLoans.length > 0 ? (
+                            filteredLoans.map((loan) => (
                                 <TableRow key={loan.id}>
                                     <TableCell>{loan.id}</TableCell>
                                     <TableCell>{loan.name}</TableCell>
                                     <TableCell>{loan.phone}</TableCell>
                                     <TableCell>{loan.amount}</TableCell>
-                                    <TableCell>{loan.term}</TableCell>
-                                    <TableCell>{loan.requestedAt}</TableCell>
+                                    <TableCell>{loan.loanPeriod}</TableCell>
+                                    <TableCell>{loan.createdAt}</TableCell>
                                     <TableCell>
                                         <Badge variant="outline" className="text-yellow-600 border-yellow-600">{loan.status}</Badge>
                                     </TableCell>
@@ -194,10 +190,6 @@ export default function PendingLoansPage() {
                                             </DialogFooter>
                                           </DialogContent>
                                         </Dialog>
-                                        <Button size="sm" className="bg-yellow-500 hover:bg-yellow-600 text-white">
-                                            <Edit className="mr-1 h-4 w-4" />
-                                            Update Loan
-                                        </Button>
                                         <Button size="sm" className="bg-green-500 hover:bg-green-600 text-white" onClick={() => handleLoanAction(loan.id, 'Approved')}>
                                             <Check className="mr-1 h-4 w-4" />
                                             Approve
