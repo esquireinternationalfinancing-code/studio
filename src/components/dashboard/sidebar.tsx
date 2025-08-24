@@ -28,6 +28,36 @@ const CustomIcon = () => (
     </svg>
 );
 
+const AdminAvatarIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 100 100"
+    className="h-full w-full"
+  >
+    <circle cx="50" cy="50" r="45" fill="#a9cde2" />
+    <g transform="translate(0, 5)">
+      <path
+        d="M50 85 C 30 85, 25 70, 25 55 L 75 55 C 75 70, 70 85, 50 85"
+        fill="#4a4a4a"
+      />
+      <path
+        d="M45 55 L 50 65 L 55 55 Z"
+        fill="#ffffff"
+      />
+       <path
+        d="M48 57 L 50 63 L 52 57 Z"
+        fill="#e53935"
+      />
+      <path
+        d="M50 55 C 45 55, 45 50, 50 50 C 55 50, 55 55, 50 55"
+        fill="#c39878"
+      />
+      <circle cx="50" cy="35" r="15" fill="#c39878" />
+      <path d="M35 38 C 35 20, 65 20, 65 38 C 60 42, 40 42, 35 38" fill="#6d4c41" />
+    </g>
+  </svg>
+);
+
 
 export function DashboardSidebar() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -62,7 +92,7 @@ export function DashboardSidebar() {
       </div>
       <div className="p-4 flex items-center gap-3 border-t border-b">
         <Avatar>
-          <AvatarImage src="https://placehold.co/40x40.png" alt="Admin" data-ai-hint="person portrait" />
+          <AdminAvatarIcon />
           <AvatarFallback>A</AvatarFallback>
         </Avatar>
         <div>
