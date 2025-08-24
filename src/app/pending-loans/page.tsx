@@ -47,10 +47,15 @@ export default function PendingLoansPage() {
   const [pendingLoans, setPendingLoans] = useState(initialPendingLoans);
 
   const handleLoanAction = (loanId: string, newStatus: 'Approved' | 'Rejected') => {
-    // In a real app, you would send this to a server.
-    // For now, we'll just filter it out from the pending list.
-    console.log(`Loan ${loanId} has been ${newStatus}`);
-    setPendingLoans(currentLoans => currentLoans.filter(loan => loan.id !== loanId));
+    if (newStatus === 'Rejected') {
+      // Clear the entire list if any loan is rejected.
+      console.log(`All pending loans have been rejected.`);
+      setPendingLoans([]);
+    } else {
+      // For 'Approved', remove only the specific loan.
+      console.log(`Loan ${loanId} has been ${newStatus}`);
+      setPendingLoans(currentLoans => currentLoans.filter(loan => loan.id !== loanId));
+    }
   };
 
 
@@ -95,71 +100,77 @@ export default function PendingLoansPage() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {pendingLoans.map((loan) => (
-                            <TableRow key={loan.id}>
-                                <TableCell>{loan.id}</TableCell>
-                                <TableCell>{loan.name}</TableCell>
-                                <TableCell>{loan.phone}</TableCell>
-                                <TableCell>{loan.amount}</TableCell>
-                                <TableCell>{loan.term}</TableCell>
-                                <TableCell>{loan.requestedAt}</TableCell>
-                                <TableCell>
-                                    <Badge variant="outline" className="text-yellow-600 border-yellow-600">{loan.status}</Badge>
-                                </TableCell>
-                                <TableCell className="flex gap-2 flex-wrap">
-                                    <Dialog>
-                                      <DialogTrigger asChild>
-                                        <Button size="sm" variant="default">
-                                            <Eye className="mr-1 h-4 w-4" />
-                                            View Profile
-                                        </Button>
-                                      </DialogTrigger>
-                                      <DialogContent className="max-w-3xl">
-                                        <DialogHeader>
-                                          <DialogTitle>User Documents</DialogTitle>
-                                        </DialogHeader>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[70vh] overflow-y-auto p-4">
-                                            <div>
-                                                <h3 className="font-semibold mb-2">Front ID:</h3>
-                                                <Image src="https://placehold.co/400x250.png" alt="Front ID" width={400} height={250} className="rounded-md w-full" data-ai-hint="id card" />
-                                            </div>
-                                            <div>
-                                                <h3 className="font-semibold mb-2">Back ID:</h3>
-                                                <Image src="https://placehold.co/400x250.png" alt="Back ID" width={400} height={250} className="rounded-md w-full" data-ai-hint="id card back" />
-                                            </div>
-                                            <div>
-                                                <h3 className="font-semibold mb-2">Selfie with ID:</h3>
-                                                <Image src="https://placehold.co/400x250.png" alt="Selfie with ID" width={400} height={250} className="rounded-md w-full" data-ai-hint="person selfie" />
-                                            </div>
-                                            <div>
-                                                <h3 className="font-semibold mb-2">Signature:</h3>
-                                                <div className="border rounded-md h-48 flex items-center justify-center bg-gray-100">
-                                                   <Image src="https://placehold.co/200x100.png" alt="Signature" width={200} height={100} data-ai-hint="signature" />
+                        {pendingLoans.length > 0 ? (
+                            pendingLoans.map((loan) => (
+                                <TableRow key={loan.id}>
+                                    <TableCell>{loan.id}</TableCell>
+                                    <TableCell>{loan.name}</TableCell>
+                                    <TableCell>{loan.phone}</TableCell>
+                                    <TableCell>{loan.amount}</TableCell>
+                                    <TableCell>{loan.term}</TableCell>
+                                    <TableCell>{loan.requestedAt}</TableCell>
+                                    <TableCell>
+                                        <Badge variant="outline" className="text-yellow-600 border-yellow-600">{loan.status}</Badge>
+                                    </TableCell>
+                                    <TableCell className="flex gap-2 flex-wrap">
+                                        <Dialog>
+                                          <DialogTrigger asChild>
+                                            <Button size="sm" variant="default">
+                                                <Eye className="mr-1 h-4 w-4" />
+                                                View Profile
+                                            </Button>
+                                          </DialogTrigger>
+                                          <DialogContent className="max-w-3xl">
+                                            <DialogHeader>
+                                              <DialogTitle>User Documents</DialogTitle>
+                                            </DialogHeader>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[70vh] overflow-y-auto p-4">
+                                                <div>
+                                                    <h3 className="font-semibold mb-2">Front ID:</h3>
+                                                    <Image src="https://placehold.co/400x250.png" alt="Front ID" width={400} height={250} className="rounded-md w-full" data-ai-hint="id card" />
+                                                </div>
+                                                <div>
+                                                    <h3 className="font-semibold mb-2">Back ID:</h3>
+                                                    <Image src="https://placehold.co/400x250.png" alt="Back ID" width={400} height={250} className="rounded-md w-full" data-ai-hint="id card back" />
+                                                </div>
+                                                <div>
+                                                    <h3 className="font-semibold mb-2">Selfie with ID:</h3>
+                                                    <Image src="https://placehold.co/400x250.png" alt="Selfie with ID" width={400} height={250} className="rounded-md w-full" data-ai-hint="person selfie" />
+                                                </div>
+                                                <div>
+                                                    <h3 className="font-semibold mb-2">Signature:</h3>
+                                                    <div className="border rounded-md h-48 flex items-center justify-center bg-gray-100">
+                                                       <Image src="https://placehold.co/200x100.png" alt="Signature" width={200} height={100} data-ai-hint="signature" />
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <DialogFooter>
-                                          <DialogClose asChild>
-                                            <Button variant="outline">Close</Button>
-                                          </DialogClose>
-                                        </DialogFooter>
-                                      </DialogContent>
-                                    </Dialog>
-                                    <Button size="sm" className="bg-yellow-500 hover:bg-yellow-600 text-white">
-                                        <Edit className="mr-1 h-4 w-4" />
-                                        Update Loan
-                                    </Button>
-                                    <Button size="sm" className="bg-green-500 hover:bg-green-600 text-white" onClick={() => handleLoanAction(loan.id, 'Approved')}>
-                                        <Check className="mr-1 h-4 w-4" />
-                                        Approve
-                                    </Button>
-                                    <Button size="sm" variant="destructive" onClick={() => handleLoanAction(loan.id, 'Rejected')}>
-                                        <X className="mr-1 h-4 w-4" />
-                                        Reject
-                                    </Button>
-                                </TableCell>
+                                            <DialogFooter>
+                                              <DialogClose asChild>
+                                                <Button variant="outline">Close</Button>
+                                              </DialogClose>
+                                            </DialogFooter>
+                                          </DialogContent>
+                                        </Dialog>
+                                        <Button size="sm" className="bg-yellow-500 hover:bg-yellow-600 text-white">
+                                            <Edit className="mr-1 h-4 w-4" />
+                                            Update Loan
+                                        </Button>
+                                        <Button size="sm" className="bg-green-500 hover:bg-green-600 text-white" onClick={() => handleLoanAction(loan.id, 'Approved')}>
+                                            <Check className="mr-1 h-4 w-4" />
+                                            Approve
+                                        </Button>
+                                        <Button size="sm" variant="destructive" onClick={() => handleLoanAction(loan.id, 'Rejected')}>
+                                            <X className="mr-1 h-4 w-4" />
+                                            Reject
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        ) : (
+                            <TableRow>
+                                <TableCell colSpan={8} className="text-center">No pending loans found.</TableCell>
                             </TableRow>
-                        ))}
+                        )}
                     </TableBody>
                   </Table>
                 </div>
