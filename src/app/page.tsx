@@ -17,7 +17,7 @@ import { DashboardSidebar } from "@/components/dashboard/sidebar";
 export default function Home() {
   return (
     <div className="flex min-h-screen w-full">
-      <DashboardSidebar />
+      <DashboardSidebar activePage="home" />
       <div className="flex flex-col w-full">
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
           <h1 className="text-2xl font-bold">Home Page Summary</h1>

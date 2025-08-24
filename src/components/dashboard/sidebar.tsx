@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
 import {
   Bell,
   Home,
@@ -15,6 +16,8 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { cn } from "@/lib/utils";
+
 
 const CustomIcon = () => (
     <svg
@@ -33,33 +36,36 @@ const AdminAvatarIcon = () => (
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 100 100"
     className="h-full w-full"
+    width="100"
+    height="100"
   >
-    <circle cx="50" cy="50" r="45" fill="#a9cde2" />
+    <circle cx="50" cy="50" r="45" fill="#4285f4" />
     <g transform="translate(0, 5)">
       <path
-        d="M50 85 C 30 85, 25 70, 25 55 L 75 55 C 75 70, 70 85, 50 85"
-        fill="#4a4a4a"
-      />
-      <path
-        d="M45 55 L 50 65 L 55 55 Z"
+        d="M50 80 C 35 80, 30 70, 30 55 L 70 55 C 70 70, 65 80, 50 80"
         fill="#ffffff"
       />
-       <path
-        d="M48 57 L 50 63 L 52 57 Z"
-        fill="#e53935"
+      <circle cx="50" cy="35" r="15" fill="#ffffff" />
+    </g>
+    <g transform="translate(0, 18)">
+      <path
+        d="M50 25 C 40 25, 40 35, 50 35 C 60 35, 60 25, 50 25"
+        fill="#f4b400"
       />
       <path
-        d="M50 55 C 45 55, 45 50, 50 50 C 55 50, 55 55, 50 55"
-        fill="#c39878"
+        d="M50 40 C 40 40, 35 50, 50 60 C 65 50, 60 40, 50 40"
+        fill="#f4b400"
       />
-      <circle cx="50" cy="35" r="15" fill="#c39878" />
-      <path d="M35 38 C 35 20, 65 20, 65 38 C 60 42, 40 42, 35 38" fill="#6d4c41" />
     </g>
   </svg>
 );
 
 
-export function DashboardSidebar() {
+interface DashboardSidebarProps {
+  activePage?: 'home' | 'administrator';
+}
+
+export function DashboardSidebar({ activePage = 'home' }: DashboardSidebarProps) {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   const toggleDarkMode = () => {
@@ -101,14 +107,18 @@ export function DashboardSidebar() {
         </div>
       </div>
       <nav className="flex-1 p-4 space-y-2">
-        <Button variant="default" className="w-full justify-start bg-primary text-primary-foreground">
-          <Home className="mr-2 h-4 w-4" />
-          Home Page
-        </Button>
-        <Button variant="ghost" className="w-full justify-start">
-          <User className="mr-2 h-4 w-4" />
-          Administrator
-        </Button>
+        <Link href="/" passHref>
+          <Button variant={activePage === 'home' ? 'default' : 'ghost'} className={cn("w-full justify-start", activePage === 'home' && "bg-primary text-primary-foreground")}>
+            <Home className="mr-2 h-4 w-4" />
+            Home Page
+          </Button>
+        </Link>
+        <Link href="/administrator" passHref>
+          <Button variant={activePage === 'administrator' ? 'default' : 'ghost'} className={cn("w-full justify-start", activePage === 'administrator' && "bg-primary text-primary-foreground")}>
+            <User className="mr-2 h-4 w-4" />
+            Administrator
+          </Button>
+        </Link>
         <div>
           <h3 className="px-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider my-2">Admin Panel</h3>
           <Button variant="ghost" className="w-full justify-start">
