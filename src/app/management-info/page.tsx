@@ -180,6 +180,18 @@ const ModifyStatusDialogContent = ({ name }: { name: string }) => {
                 setStatus("Bank Information Incorrect");
                 setMessage("There appears to be an issue with the bank information you provided. Please review and update your details to proceed.");
                 break;
+            case 'invalid-amount':
+                setStatus("Withdraw Invalid Amount");
+                setMessage("The withdrawal amount requested is invalid. Please check the amount and try again.");
+                break;
+            case 'confirm-otp':
+                setStatus("Confirm New OTP");
+                setMessage("A new OTP has been generated. Please use this to confirm your transaction.");
+                break;
+            case 'insufficient-credit':
+                setStatus("Insufficient Credit Score");
+                setMessage("Your loan could not be processed due to an insufficient credit score. Please contact us for more details.");
+                break;
             default:
                 break;
         }
@@ -207,15 +219,15 @@ const ModifyStatusDialogContent = ({ name }: { name: string }) => {
                     <Label htmlFor={`bank-incorrect-${name}`}>Bank Information Incorrect</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                    <Checkbox id={`invalid-amount-${name}`} />
+                    <Checkbox id={`invalid-amount-${name}`} onCheckedChange={(checked) => handleCheckboxChange(checked, 'invalid-amount')} />
                     <Label htmlFor={`invalid-amount-${name}`}>Withdraw Invalid Amount</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                    <Checkbox id={`confirm-otp-${name}`} />
+                    <Checkbox id={`confirm-otp-${name}`} onCheckedChange={(checked) => handleCheckboxChange(checked, 'confirm-otp')} />
                     <Label htmlFor={`confirm-otp-${name}`}>Confirm New OTP</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                    <Checkbox id={`insufficient-credit-${name}`} />
+                    <Checkbox id={`insufficient-credit-${name}`} onCheckedChange={(checked) => handleCheckboxChange(checked, 'insufficient-credit')} />
                     <Label htmlFor={`insufficient-credit-${name}`}>Insufficient Credit Score</Label>
                 </div>
             </div>
