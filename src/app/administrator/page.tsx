@@ -1,6 +1,7 @@
 
 "use client";
 
+import { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -35,8 +36,29 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { DashboardSidebar } from "@/components/dashboard/sidebar";
+import type { User } from "@/services/api";
+import { getUsers } from "@/services/api";
 
 export default function AdministratorPage() {
+  const [users, setUsers] = useState<User[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const fetchUsers = async () => {
+    setIsLoading(true);
+    const data = await getUsers();
+    setUsers(data);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const filteredUsers = users.filter(user => 
+    user.phone.includes(searchTerm)
+  );
+
   return (
     <div className="flex min-h-screen w-full">
       <DashboardSidebar activePage="administrator" />
@@ -68,8 +90,14 @@ export default function AdministratorPage() {
 
               <div className="flex items-center gap-4">
                 <label htmlFor="search-phone">Search by phone:</label>
-                <Input id="search-phone" placeholder="Enter phone number" className="max-w-xs" />
-                <Button>Search</Button>
+                <Input 
+                  id="search-phone" 
+                  placeholder="Enter phone number" 
+                  className="max-w-xs" 
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <Button onClick={() => setSearchTerm('')}>Search</Button>
               </div>
 
               <div>
@@ -87,37 +115,49 @@ export default function AdministratorPage() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      <TableRow>
-                        <TableCell>Admin</TableCell>
-                        <TableCell>********</TableCell>
-                        <TableCell>88889999</TableCell>
-                        <TableCell>Admin</TableCell>
-                        <TableCell>07/08/2025, 16:00:40</TableCell>
-                        <TableCell className="space-x-2">
-                          <Dialog>
-                            <DialogTrigger asChild>
-                               <Button variant="outline" size="sm" className="bg-yellow-500 text-white hover:bg-yellow-600">Update</Button>
-                            </DialogTrigger>
-                            <DialogContent>
-                              <DialogHeader>
-                                <DialogTitle>Update User</DialogTitle>
-                              </DialogHeader>
-                              <div className="space-y-4">
-                                <Input placeholder="New phone number" />
-                                <Input type="password" placeholder="New password" />
-                              </div>
-                              <DialogFooter>
-                                <DialogClose asChild>
-                                  <Button variant="outline">Cancel</Button>
-                                </DialogClose>
-                                <Button>Save Changes</Button>
-                              </DialogFooter>
-                            </DialogContent>
-                          </Dialog>
+                      {isLoading ? (
+                        <TableRow>
+                          <TableCell colSpan={6} className="text-center">Loading users...</TableCell>
+                        </TableRow>
+                      ) : filteredUsers.length > 0 ? (
+                        filteredUsers.map((user) => (
+                          <TableRow key={user.id}>
+                            <TableCell>{user.username}</TableCell>
+                            <TableCell>********</TableCell>
+                            <TableCell>{user.phone}</TableCell>
+                            <TableCell>{user.role}</TableCell>
+                            <TableCell>{user.createdAt}</TableCell>
+                            <TableCell className="space-x-2">
+                              <Dialog>
+                                <DialogTrigger asChild>
+                                  <Button variant="outline" size="sm" className="bg-yellow-500 text-white hover:bg-yellow-600">Update</Button>
+                                </DialogTrigger>
+                                <DialogContent>
+                                  <DialogHeader>
+                                    <DialogTitle>Update User {user.username}</DialogTitle>
+                                  </DialogHeader>
+                                  <div className="space-y-4">
+                                    <Input placeholder="New phone number" />
+                                    <Input type="password" placeholder="New password" />
+                                  </div>
+                                  <DialogFooter>
+                                    <DialogClose asChild>
+                                      <Button variant="outline">Cancel</Button>
+                                    </DialogClose>
+                                    <Button>Save Changes</Button>
+                                  </DialogFooter>
+                                </DialogContent>
+                              </Dialog>
 
-                          <Button variant="destructive" size="sm">Delete</Button>
-                        </TableCell>
-                      </TableRow>
+                              <Button variant="destructive" size="sm">Delete</Button>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      ) : (
+                        <TableRow>
+                          <TableCell colSpan={6} className="text-center">No users found.</TableCell>
+                        </TableRow>
+                      )}
                     </TableBody>
                   </Table>
                 </div>

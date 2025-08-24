@@ -23,6 +23,16 @@ export interface Loan {
     password?: string;
 }
 
+export interface User {
+    id: string;
+    username: string;
+    phone: string;
+    role: 'User' | 'Admin' | 'Killer';
+    createdAt: string;
+    password?: string;
+}
+
+
 // IMPORTANT: Replace this with your actual API base URL.
 const API_BASE_URL = 'https://api.sxafinancelending.com/v1';
 const API_KEY = process.env.NEXT_PUBLIC_SXA_FINANCE_API_KEY;
@@ -61,6 +71,40 @@ export const getLoans = async (): Promise<Loan[]> => {
         return []; // Return an empty array on error to avoid crashing the UI.
     }
 };
+
+/**
+ * Fetches the list of all users from the Sxa Finance Lending platform.
+ * @returns A promise that resolves to an array of users.
+ */
+export const getUsers = async (): Promise<User[]> => {
+    console.log("Fetching users from the Sxa Finance Lending API...");
+    
+    if (!API_KEY) {
+        console.error("API Key is not configured. Please check your .env.local file.");
+        return [];
+    }
+    
+    try {
+        // Assuming a '/users' endpoint exists on your API
+        const response = await fetch(`${API_BASE_URL}/users`, {
+            headers: {
+                'Authorization': `Bearer ${API_KEY}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`API call failed with status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Failed to fetch users:", error);
+        return []; 
+    }
+};
+
 
 /**
  * Updates a loan's details on the Sxa Finance Lending platform.
