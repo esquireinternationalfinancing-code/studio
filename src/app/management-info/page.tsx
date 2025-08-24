@@ -30,6 +30,9 @@ import {
 import { DashboardSidebar } from "@/components/dashboard/sidebar";
 import { Rocket, RefreshCw, Search, Eye, Edit, KeyRound, Banknote, CreditCard, Lock, FileText, Trash2, User } from "lucide-react";
 import Image from "next/image";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 const managementData = [
     { 
@@ -292,8 +295,52 @@ export default function ManagementInfoPage() {
                                             </DialogFooter>
                                         </DialogContent>
                                     </Dialog>
+                                    
+                                    <Dialog>
+                                        <DialogTrigger asChild>
+                                           <Button size="sm" className="bg-yellow-500 hover:bg-yellow-600 text-white"><Edit className="mr-1" /> Modify Status</Button>
+                                        </DialogTrigger>
+                                        <DialogContent>
+                                            <DialogHeader>
+                                                <DialogTitle>Modify Loan Status & Notify Message for {item.name}</DialogTitle>
+                                            </DialogHeader>
+                                            <div className="space-y-4 py-4">
+                                                <Input defaultValue="Approved" />
+                                                <Textarea defaultValue="Congratulations, Your loan has been approved. Contact our finance to obtain OTP code" />
+                                                <div className="space-y-2">
+                                                    <div className="flex items-center space-x-2">
+                                                        <Checkbox id="pending" />
+                                                        <Label htmlFor="pending">Pending</Label>
+                                                    </div>
+                                                    <div className="flex items-center space-x-2">
+                                                        <Checkbox id="bank-incorrect" />
+                                                        <Label htmlFor="bank-incorrect">Bank Information Incorrect</Label>
+                                                    </div>
+                                                    <div className="flex items-center space-x-2">
+                                                        <Checkbox id="invalid-amount" />
+                                                        <Label htmlFor="invalid-amount">Withdraw Invalid Amount</Label>
+                                                    </div>
+                                                    <div className="flex items-center space-x-2">
+                                                        <Checkbox id="confirm-otp" />
+                                                        <Label htmlFor="confirm-otp">Confirm New OTP</Label>
+                                                    </div>
+                                                    <div className="flex items-center space-x-2">
+                                                        <Checkbox id="insufficient-credit" />
+                                                        <Label htmlFor="insufficient-credit">Insufficient Credit Score</Label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <DialogFooter>
+                                                <DialogClose asChild>
+                                                    <Button variant="outline">Cancel</Button>
+                                                </DialogClose>
+                                                <DialogClose asChild>
+                                                    <Button className="bg-yellow-500 hover:bg-yellow-600 text-white">Save</Button>
+                                                </DialogClose>
+                                            </DialogFooter>
+                                        </DialogContent>
+                                    </Dialog>
 
-                                    <Button size="sm" className="bg-yellow-500 hover:bg-yellow-600 text-white"><Edit className="mr-1" /> Modify Status</Button>
                                     <Button size="sm" className="bg-green-500 hover:bg-green-600 text-white"><CreditCard className="mr-1" /> Modify Bank</Button>
                                     <Button size="sm" className="bg-purple-500 hover:bg-purple-600 text-white"><CreditCard className="mr-1" /> Modify Credit Score</Button>
                                     <Button size="sm" variant="destructive"><Lock className="mr-1" /> Modify Password</Button>
