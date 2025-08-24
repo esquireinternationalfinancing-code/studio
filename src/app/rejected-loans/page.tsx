@@ -31,27 +31,30 @@ import { Badge } from "@/components/ui/badge";
 import { DashboardSidebar } from "@/components/dashboard/sidebar";
 import { XCircle, RefreshCw, Search, Eye } from "lucide-react";
 import Image from "next/image";
-
-interface RejectedLoan {
-  id: string;
-  name: string;
-  phone: string;
-  amount: string;
-  term: number;
-  dateRejected: string;
-  rejectedBy: string;
-  status: string;
-}
+import type { Loan } from "@/services/api";
+import { getLoans } from "@/services/api";
 
 export default function RejectedLoansPage() {
-  const [rejectedLoans, setRejectedLoans] = useState<RejectedLoan[]>([]);
+  const [rejectedLoans, setRejectedLoans] = useState<Loan[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    const allLoans = await getLoans();
+    const rejected = allLoans.filter(loan => loan.status === 'Rejected');
+    setRejectedLoans(rejected);
+    setIsLoading(false);
+  };
 
   useEffect(() => {
-    const storedRejectedLoans = localStorage.getItem('rejectedLoans');
-    if (storedRejectedLoans) {
-      setRejectedLoans(JSON.parse(storedRejectedLoans));
-    }
+    fetchData();
   }, []);
+
+  const filteredLoans = rejectedLoans.filter(loan =>
+    loan.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    loan.phone.includes(searchTerm)
+  );
 
   return (
     <div className="flex min-h-screen w-full">
@@ -67,13 +70,17 @@ export default function RejectedLoansPage() {
             </CardHeader>
             <CardContent className="space-y-8">
               <div className="flex items-center gap-4">
-                <Input placeholder="Search Name..." className="max-w-xs" />
-                <Input placeholder="Search Phone..." className="max-w-xs" />
-                <Button className="bg-red-500 hover:bg-red-600 text-white">
+                 <Input 
+                  placeholder="Search Name or Phone..." 
+                  className="max-w-xs"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <Button className="bg-red-500 hover:bg-red-600 text-white" onClick={() => setSearchTerm('')}>
                     <Search className="mr-2 h-4 w-4" />
                     Search
                 </Button>
-                <Button variant="outline">
+                <Button variant="outline" onClick={fetchData}>
                     <RefreshCw className="h-4 w-4" />
                 </Button>
               </div>
@@ -95,16 +102,18 @@ export default function RejectedLoansPage() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {rejectedLoans.length > 0 ? (
-                            rejectedLoans.map((loan) => (
+                        {isLoading ? (
+                           <TableRow><TableCell colSpan={9} className="text-center">Loading...</TableCell></TableRow>
+                        ) : filteredLoans.length > 0 ? (
+                            filteredLoans.map((loan) => (
                                 <TableRow key={loan.id}>
                                     <TableCell>{loan.id}</TableCell>
                                     <TableCell>{loan.name}</TableCell>
                                     <TableCell>{loan.phone}</TableCell>
                                     <TableCell>{loan.amount}</TableCell>
-                                    <TableCell>{loan.term}</TableCell>
-                                    <TableCell>{loan.dateRejected}</TableCell>
-                                    <TableCell>{loan.rejectedBy ?? 'null'}</TableCell>
+                                    <TableCell>{loan.loanPeriod}</TableCell>
+                                    <TableCell>{"N/A"}</TableCell>
+                                    <TableCell>{"Admin"}</TableCell>
                                     <TableCell>
                                         <Badge variant="outline" className="text-red-600 border-red-600">{loan.status}</Badge>
                                     </TableCell>

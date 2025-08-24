@@ -29,29 +29,32 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { DashboardSidebar } from "@/components/dashboard/sidebar";
-import { CheckCircle, RefreshCw, Search, Eye, Edit } from "lucide-react";
+import { CheckCircle, RefreshCw, Search, Eye } from "lucide-react";
 import Image from "next/image";
-
-interface ApprovedLoan {
-  id: string;
-  name: string;
-  phone: string;
-  amount: string;
-  term: number;
-  dateApproved: string;
-  approvedBy: string;
-  status: string;
-}
+import type { Loan } from "@/services/api";
+import { getLoans } from "@/services/api";
 
 export default function ApprovedLoansPage() {
-  const [approvedLoans, setApprovedLoans] = useState<ApprovedLoan[]>([]);
+  const [approvedLoans, setApprovedLoans] = useState<Loan[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    const allLoans = await getLoans();
+    const approved = allLoans.filter(loan => loan.status === 'Approved');
+    setApprovedLoans(approved);
+    setIsLoading(false);
+  };
 
   useEffect(() => {
-    const storedApprovedLoans = localStorage.getItem('approvedLoans');
-    if (storedApprovedLoans) {
-      setApprovedLoans(JSON.parse(storedApprovedLoans));
-    }
+    fetchData();
   }, []);
+
+  const filteredLoans = approvedLoans.filter(loan =>
+    loan.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    loan.phone.includes(searchTerm)
+  );
 
   return (
     <div className="flex min-h-screen w-full">
@@ -67,13 +70,17 @@ export default function ApprovedLoansPage() {
             </CardHeader>
             <CardContent className="space-y-8">
               <div className="flex items-center gap-4">
-                <Input placeholder="Search Name..." className="max-w-xs" />
-                <Input placeholder="Search Phone..." className="max-w-xs" />
-                <Button className="bg-green-500 hover:bg-green-600 text-white">
+                <Input 
+                  placeholder="Search Name or Phone..." 
+                  className="max-w-xs"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <Button className="bg-green-500 hover:bg-green-600 text-white" onClick={() => setSearchTerm('')}>
                     <Search className="mr-2 h-4 w-4" />
                     Search
                 </Button>
-                <Button variant="outline">
+                <Button variant="outline" onClick={fetchData}>
                     <RefreshCw className="h-4 w-4" />
                 </Button>
               </div>
@@ -95,16 +102,18 @@ export default function ApprovedLoansPage() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {approvedLoans.length > 0 ? (
-                            approvedLoans.map((loan) => (
+                        {isLoading ? (
+                          <TableRow><TableCell colSpan={9} className="text-center">Loading...</TableCell></TableRow>
+                        ) : filteredLoans.length > 0 ? (
+                            filteredLoans.map((loan) => (
                                 <TableRow key={loan.id}>
                                     <TableCell>{loan.id}</TableCell>
                                     <TableCell>{loan.name}</TableCell>
                                     <TableCell>{loan.phone}</TableCell>
                                     <TableCell>{loan.amount}</TableCell>
-                                    <TableCell>{loan.term}</TableCell>
+                                    <TableCell>{loan.loanPeriod}</TableCell>
                                     <TableCell>{loan.dateApproved}</TableCell>
-                                    <TableCell>{loan.approvedBy ?? 'null'}</TableCell>
+                                    <TableCell>{loan.approvedBy ?? 'N/A'}</TableCell>
                                     <TableCell>
                                         <Badge variant="outline" className="text-green-600 border-green-600">{loan.status}</Badge>
                                     </TableCell>
