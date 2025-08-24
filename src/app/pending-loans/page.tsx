@@ -47,15 +47,8 @@ export default function PendingLoansPage() {
   const [pendingLoans, setPendingLoans] = useState(initialPendingLoans);
 
   const handleLoanAction = (loanId: string, newStatus: 'Approved' | 'Rejected') => {
-    if (newStatus === 'Rejected') {
-      // Clear the entire list if any loan is rejected.
-      console.log(`All pending loans have been rejected.`);
-      setPendingLoans([]);
-    } else {
-      // For 'Approved', remove only the specific loan.
-      console.log(`Loan ${loanId} has been ${newStatus}`);
-      setPendingLoans(currentLoans => currentLoans.filter(loan => loan.id !== loanId));
-    }
+    console.log(`Loan ${loanId} has been ${newStatus}`);
+    setPendingLoans(currentLoans => currentLoans.filter(loan => loan.id !== loanId));
   };
 
 
