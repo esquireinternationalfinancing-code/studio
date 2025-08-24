@@ -274,6 +274,16 @@ export default function ManagementInfoPage() {
                                                     <h3 className="font-semibold mb-2 text-sm text-muted-foreground">Back ID:</h3>
                                                     <Image src="https://placehold.co/400x250.png" alt="Back ID" width={400} height={250} className="rounded-md w-full" data-ai-hint="id card back" />
                                                 </div>
+                                                <div className="col-span-1 mt-4">
+                                                    <h3 className="font-semibold mb-2 text-sm text-muted-foreground">Selfie with ID:</h3>
+                                                    <Image src="https://placehold.co/400x250.png" alt="Selfie with ID" width={400} height={250} className="rounded-md w-full" data-ai-hint="person selfie" />
+                                                </div>
+                                                <div className="col-span-1 mt-4">
+                                                    <h3 className="font-semibold mb-2 text-sm text-muted-foreground">Signature:</h3>
+                                                    <div className="border rounded-md h-full flex items-center justify-center bg-gray-100">
+                                                       <Image src="https://placehold.co/200x100.png" alt="Signature" width={200} height={100} data-ai-hint="signature" />
+                                                    </div>
+                                                </div>
                                             </div>
                                             <DialogFooter>
                                                 <DialogClose asChild>
